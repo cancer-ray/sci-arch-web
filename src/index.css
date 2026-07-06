@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@300;400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 40 20% 98%;      /* off-white paper #FAF9F6 */
+        --foreground: 0 0% 7%;          /* ink #111 */
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 7%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 7%;
+        --primary: 224 76% 40%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 40 15% 94%;
+        --secondary-foreground: 0 0% 7%;
+        --muted: 40 12% 92%;
+        --muted-foreground: 0 0% 45%;
+        --accent: 40 15% 94%;
+        --accent-foreground: 0 0% 7%;
+        --destructive: 0 74% 42%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 0 0% 90%;
+        --input: 0 0% 90%;
+        --ring: 224 76% 40%;
+        --radius: 2px;
+    }
+
+    .dark {
+        --background: 0 0% 4%;
+        --foreground: 0 0% 93%;
+        --card: 0 0% 8%;
+        --card-foreground: 0 0% 93%;
+        --popover: 0 0% 8%;
+        --popover-foreground: 0 0% 93%;
+        --primary: 217 91% 60%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 0 0% 12%;
+        --secondary-foreground: 0 0% 93%;
+        --muted: 0 0% 14%;
+        --muted-foreground: 0 0% 64%;
+        --accent: 0 0% 14%;
+        --accent-foreground: 0 0% 93%;
+        --destructive: 0 63% 42%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 0 0% 15%;
+        --input: 0 0% 15%;
+        --ring: 217 91% 60%;
+    }
+
+    /* Accent picker overrides. "cobalt" (the default) needs no rule here — it
+       falls through to the --primary/--ring values already set above. */
+    :root[data-accent="forest"] { --primary: 152 48% 30%; --ring: 152 48% 30%; }
+    .dark[data-accent="forest"] { --primary: 152 45% 48%; --ring: 152 45% 48%; }
+
+    :root[data-accent="clay"] { --primary: 14 58% 42%; --ring: 14 58% 42%; }
+    .dark[data-accent="clay"] { --primary: 14 62% 52%; --ring: 14 62% 52%; }
+
+    :root[data-accent="plum"] { --primary: 280 38% 42%; --ring: 280 38% 42%; }
+    .dark[data-accent="plum"] { --primary: 280 40% 55%; --ring: 280 40% 55%; }
+
+    :root[data-accent="crimson"] { --primary: 352 60% 38%; --ring: 352 60% 38%; }
+    .dark[data-accent="crimson"] { --primary: 352 65% 55%; --ring: 352 65% 55%; }
+
+    :root[data-accent="amber"] { --primary: 38 70% 38%; --ring: 38 70% 38%; }
+    .dark[data-accent="amber"] { --primary: 38 75% 48%; --ring: 38 75% 48%; }
+
+    :root[data-accent="teal"] { --primary: 180 45% 32%; --ring: 180 45% 32%; }
+    .dark[data-accent="teal"] { --primary: 180 45% 48%; --ring: 180 45% 48%; }
+
+    :root[data-accent="indigo"] { --primary: 243 45% 45%; --ring: 243 45% 45%; }
+    .dark[data-accent="indigo"] { --primary: 243 55% 62%; --ring: 243 55% 62%; }
+
+    :root[data-accent="rose"] { --primary: 340 50% 45%; --ring: 340 50% 45%; }
+    .dark[data-accent="rose"] { --primary: 340 55% 60%; --ring: 340 55% 60%; }
+
+    :root[data-accent="olive"] { --primary: 72 35% 32%; --ring: 72 35% 32%; }
+    .dark[data-accent="olive"] { --primary: 72 35% 48%; --ring: 72 35% 48%; }
+
+    html {
+        font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        margin: 0;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .font-serif,
+    h1,
+    h2,
+    h3 {
+        font-family: "Spectral", ui-serif, Georgia, serif;
+        font-feature-settings: "kern", "liga", "onum";
+    }
+
+    .font-mono,
+    code,
+    pre,
+    kbd,
+    samp {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * {
+        border-color: hsl(var(--border));
+    }
+
+    ::selection {
+        background: hsl(var(--foreground));
+        color: hsl(var(--background));
+    }
+}
+
+/* ─────────────────────────────────────────────
+   DNA background — ATCG letters scattered
+   ───────────────────────────────────────────── */
+
+.dna-bg {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.dna-bg::before {
+    content:
+        "A  T  G  C  T  A  C  G   T A G C T A G C T A G C\A"
+        "  G  C  T  A  G  C  T  A   C G T A C G T A C G T A\A"
+        "A  T  C  G  A  T  G  C   T A C G T A C G T A G C T\A"
+        "  C  G  T  A  T  G  C  A   A T G C A T G C A T G C\A"
+        "T  A  G  C  A  T  G  C   G C A T G C A T G C A T\A"
+        "  G  C  A  T  G  C  A  T   T A C G A T C G A T C G\A"
+        "A  T  G  C  T  A  G  C   C G T A C G T A C G T A\A"
+        "  C  G  A  T  A  T  G  C   T A G C T A G C T A G C\A";
+    position: absolute;
+    inset: -10% -5%;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 14px;
+    line-height: 2.4;
+    letter-spacing: 0.6em;
+    white-space: pre;
+    color: hsl(var(--foreground));
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 0;
+    transform: rotate(-8deg);
+    user-select: none;
+}
+
+.dark .dna-bg::before {
+    opacity: 0.06;
+}
+
+.dna-bg > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Optional stronger overlay in the hero */
+.dna-bg-strong::before {
+    opacity: 0.055;
+    font-size: 15px;
+}
+
+.dark .dna-bg-strong::before {
+    opacity: 0.08;
+}
+
+/* Paper grain — kept for pricing/other sections */
+.paper-grain {
+    background-image:
+        radial-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px);
+    background-size: 3px 3px;
+}
+
+/* Cursor blink */
+@keyframes cursor-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+.eln-cursor {
+    display: inline-block;
+    width: 0.55ch;
+    height: 1em;
+    vertical-align: text-bottom;
+    background: currentColor;
+    animation: cursor-blink 1s steps(1) infinite;
+    margin-left: 1px;
+}
+
+/* Marching ants */
+@keyframes ants {
+    to { background-position: 8px 0, -8px 0, 0 8px, 0 -8px; }
+}
+.marching-ants {
+    background:
+        linear-gradient(90deg, currentColor 50%, transparent 50%) top / 8px 1px repeat-x,
+        linear-gradient(90deg, currentColor 50%, transparent 50%) bottom / 8px 1px repeat-x,
+        linear-gradient(0deg,  currentColor 50%, transparent 50%) left / 1px 8px repeat-y,
+        linear-gradient(0deg,  currentColor 50%, transparent 50%) right / 1px 8px repeat-y;
+    animation: ants 0.6s linear infinite;
+}
+
+/* Feature card locked shimmer */
+@keyframes lock-pulse {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; }
+}
+.pro-locked {
+    position: relative;
+}
+.pro-locked::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            transparent 0,
+            transparent 8px,
+            hsl(var(--foreground) / 0.025) 8px,
+            hsl(var(--foreground) / 0.025) 9px
+        );
+    pointer-events: none;
+}
+
+/* Editorial rule dividers */
+.rule {
+    border-top: 1px solid hsl(var(--border));
+}
+
+/* Button micro-interaction: inset highlight + tiny lift, no shadow/glow */
+.btn-lift {
+    box-shadow: inset 0 1px 0 hsl(var(--foreground) / 0.06);
+    transition: transform 0.15s cubic-bezier(0.2, 0.72, 0.18, 1),
+        box-shadow 0.15s cubic-bezier(0.2, 0.72, 0.18, 1),
+        background-color 0.15s cubic-bezier(0.2, 0.72, 0.18, 1),
+        color 0.15s cubic-bezier(0.2, 0.72, 0.18, 1);
+}
+.btn-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 hsl(var(--foreground) / 0.12);
+}
+.btn-lift:active {
+    transform: translateY(0);
+}
+
+:focus-visible {
+    outline: 1px solid hsl(var(--ring));
+    outline-offset: 2px;
+}
