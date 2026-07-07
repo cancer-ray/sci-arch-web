@@ -15,7 +15,8 @@ import {
   ScrollText,
   Receipt,
 } from "lucide-react";
-import LiquidGlass from "liquid-glass-react";
+import { PrintedCard } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 import { LANDING } from "@/constants/testIds";
 
 /**
@@ -147,6 +148,7 @@ const SCENES = [
     sub: "Claude writes it, in your voice.",
     status: "ai-assisted · claude drafting",
     duration: 4400,
+    plus: true,
   },
   {
     id: "sign",
@@ -155,6 +157,7 @@ const SCENES = [
     sub: "Only a human locks the record.",
     status: "awaiting signature",
     duration: 4000,
+    plus: true,
   },
   {
     id: "inventory",
@@ -163,6 +166,7 @@ const SCENES = [
     sub: "Claude updates stock as you work.",
     status: "claude: logging inventory",
     duration: 4200,
+    plus: true,
   },
   {
     id: "embed",
@@ -304,8 +308,8 @@ function AuditHistory({ locked }) {
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center justify-between px-3 py-2 text-[11px]"
             >
-              <span className="text-emerald-700 dark:text-emerald-400">signed &amp; locked</span>
-              <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.15em] text-emerald-700 dark:text-emerald-400">
+              <span className="text-success">signed &amp; locked</span>
+              <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.15em] text-success">
                 <ShieldCheck className="h-2.5 w-2.5" /> human · you
               </span>
             </motion.li>
@@ -328,17 +332,7 @@ function SignScene({ resetKey }) {
     <div className="col-span-9 grid h-[340px] grid-cols-9">
       <AuditHistory key={resetKey} locked={locked} />
       <div className="col-span-4 flex items-center justify-center p-6">
-        <LiquidGlass
-          cornerRadius={2}
-          displacementScale={40}
-          blurAmount={0.08}
-          saturation={110}
-          aberrationIntensity={1}
-          elasticity={0.1}
-          overLight
-          padding="16px"
-          className="relative z-10 w-full max-w-[240px] border border-border bg-background"
-        >
+        <PrintedCard className="relative z-10 w-full max-w-[240px] p-4">
           <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
             sign &amp; lock
           </div>
@@ -373,14 +367,14 @@ function SignScene({ resetKey }) {
                 key="locked"
                 initial={{ opacity: 0, scale: 0.85, rotate: -4 }}
                 animate={{ opacity: 1, scale: 1, rotate: -2 }}
-                className="mt-3 flex items-center justify-center gap-1.5 border border-emerald-600/60 px-2 py-1.5 text-[10px] text-emerald-700 dark:border-emerald-500/60 dark:text-emerald-400"
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-[2px] border border-success/60 px-2 py-1.5 text-[10px] text-success"
               >
                 <ShieldCheck className="h-3 w-3" />
                 signed &amp; locked
               </motion.div>
             )}
           </AnimatePresence>
-        </LiquidGlass>
+        </PrintedCard>
       </div>
     </div>
   );
@@ -537,6 +531,12 @@ export function ElnHero() {
             </span>
             <span className="font-serif text-base text-foreground">{scene.title}</span>
             <span className="hidden text-xs text-muted-foreground sm:inline">{scene.sub}</span>
+            {scene.plus && (
+              <Badge variant="soon" className="ml-auto flex-none self-center whitespace-nowrap">
+                <span className="hidden sm:inline">SCI-ARCH+ · IN DEVELOPMENT</span>
+                <span className="sm:hidden">SCI-ARCH+</span>
+              </Badge>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

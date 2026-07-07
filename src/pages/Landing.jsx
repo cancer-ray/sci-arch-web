@@ -23,11 +23,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Input, Textarea } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ElnHero } from "@/components/ElnHero";
 import { PricingTable } from "@/components/PricingTable";
 import { FreeLnBadge } from "@/components/FreeLnBadge";
+import { Seo } from "@/components/Seo";
 import { CONNECTOR_URL, copyConnectorUrl } from "@/lib/connector";
 import { LANDING } from "@/constants/testIds";
 
@@ -66,7 +70,7 @@ const studentFeatures = [
     title: "AI-capable",
     body: "Bring your own model, back it up to the cloud, and manage your personal reagents.",
     icon: Bot,
-    preview: "soloLN, launching next week",
+    preview: "soloLN · coming soon",
   },
   {
     id: LANDING.featureImages,
@@ -74,7 +78,7 @@ const studentFeatures = [
     title: "Built for teams",
     body: "A GLP-compliance layer for labs ranging from 2 employees to enterprise: inventory management, shared seats, tracked commenting between users, and shared equipment booking.",
     icon: Users,
-    preview: "groupLN, launching in August",
+    preview: "groupLN · coming soon",
   },
 ];
 
@@ -82,7 +86,7 @@ const studentFeatures = [
 const faqs = [
   {
     q: "What's the difference between freeLN and sci-arch+?",
-    a: "freeLN is live today: fully local, nothing is ever uploaded, free forever. sci-arch+ is the cloud product: soloLN (for founders and individuals) launches next week; groupLN (shared notebooks, e-signatures, full audit trail, from a small lab to a large enterprise) launches in August. Join the waitlist on the pricing section above for early access.",
+    a: "freeLN is live today: fully local, nothing is ever uploaded, free forever. sci-arch+ is the cloud product, coming soon: soloLN (for founders and individuals) and groupLN (shared notebooks, e-signatures, full audit trail, from a small lab to a large enterprise). Join the waitlist on the pricing section above for early access.",
   },
   {
     q: "Where is my data stored?",
@@ -133,8 +137,7 @@ export default function LandingPage() {
   const [copied, setCopied] = useState(false);
   const [faqEmail, setFaqEmail] = useState("");
   const [faqMessage, setFaqMessage] = useState("");
-  const [faqSending, setFaqSending] = useState(false);
-  const [faqSent, setFaqSent] = useState(false);
+  const [faqCopied, setFaqCopied] = useState(false);
 
   const handleCopyConnector = () => {
     copyConnectorUrl(() => {
@@ -143,37 +146,49 @@ export default function LandingPage() {
     });
   };
 
-  // No backend is deployed yet, so this opens the visitor's own mail client
-  // pre-filled instead of POSTing to /contact/sales. Swap back to the API
-  // call once the backend is live (see git history for the previous version).
-  const submitFaqContact = (e) => {
-    e.preventDefault();
-    setFaqSending(true);
-    window.location.href = `mailto:ryan@sci-arch.ca?subject=${encodeURIComponent(
-      "Question from sci-arch.ca"
-    )}&body=${encodeURIComponent(`From: ${faqEmail}\n\n${faqMessage}`)}`;
-    setFaqSent(true);
-    setFaqMessage("");
-    setFaqSending(false);
+  // No backend is deployed yet, so nothing is POSTed anywhere. The primary
+  // path copies the composed message for the visitor to paste into any mail
+  // client; the mailto link is the secondary path. Neither clears the form,
+  // so the composed message stays visible.
+  const faqMailto = `mailto:ryan@sci-arch.ca?subject=${encodeURIComponent(
+    "Question from sci-arch.ca"
+  )}&body=${encodeURIComponent(`From: ${faqEmail}\n\n${faqMessage}`)}`;
+
+  const copyFaqMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `To: ryan@sci-arch.ca\nFrom: ${faqEmail}\n\n${faqMessage}`
+      );
+      setFaqCopied(true);
+      setTimeout(() => setFaqCopied(false), 2200);
+    } catch {
+      // Clipboard unavailable (permissions/insecure context) — the mailto
+      // link below remains as the fallback path.
+    }
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Seo
+        title="sci-arch — a lab notebook that holds up"
+        description="Local-first, Part 11-aligned electronic lab notebook. Free with freeLN — write, import, and export markdown; nothing leaves your device. Bring your own AI."
+        event="landing_view"
+      />
       <Nav />
 
       {/* HERO */}
       <section
         id="top"
         data-testid={LANDING.hero}
-        className="relative border-b border-border dna-bg dna-bg-strong"
+        className="relative scroll-mt-14 border-b border-border dna-bg dna-bg-strong"
       >
-        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-12 md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:py-16 md:grid-cols-12 lg:px-8">
           <div className="md:col-span-5">
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
+              className="eyebrow"
             >
               § sci-arch · electronic lab notebook · sci-arch.ca
             </motion.div>
@@ -183,15 +198,15 @@ export default function LandingPage() {
               transition={{ delay: 0.05, duration: 0.6 }}
               className="mt-4 font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
             >
-              Make AI-written lab notes
+              A notebook for
               <br className="hidden sm:block" />
-              <span className="italic text-foreground/85"> defensible.</span>
+              <span className="italic text-foreground/85"> real scientists.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.6 }}
-              className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground"
+              className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground"
             >
               Let your AI write the lab notes. sci-arch keeps a record that holds up: every action,
               human or AI, lands signed, versioned, and audit-ready. Bring your own Claude, no AI markup.
@@ -202,22 +217,22 @@ export default function LandingPage() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="mt-5 space-y-2.5"
             >
-              <li className="flex items-start gap-2.5 text-sm">
-                <ShieldCheck className="mt-0.5 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
+              <li className="flex items-start gap-2.5 text-base">
+                <ShieldCheck className="mt-1 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
                 <span>
                   <span className="font-medium text-foreground">Audit-ready AI actions</span>{" "}
                   <span className="text-muted-foreground">every AI edit is attributable, versioned, tamper-evident. A human signs; AI never does.</span>
                 </span>
               </li>
-              <li className="flex items-start gap-2.5 text-sm">
-                <Bot className="mt-0.5 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
+              <li className="flex items-start gap-2.5 text-base">
+                <Bot className="mt-1 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
                 <span>
                   <span className="font-medium text-foreground">Bring your own AI</span>{" "}
                   <span className="text-muted-foreground">connect Claude via our MCP connector. No AI markup; you own the model.</span>
                 </span>
               </li>
-              <li className="flex items-start gap-2.5 text-sm">
-                <Download className="mt-0.5 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
+              <li className="flex items-start gap-2.5 text-base">
+                <Download className="mt-1 h-4 w-4 flex-none text-foreground" strokeWidth={1.6} />
                 <span>
                   <span className="font-medium text-foreground">One-click defensible export</span>{" "}
                   <span className="text-muted-foreground">a signed, timestamped record a PI or QA reviewer trusts.</span>
@@ -233,19 +248,17 @@ export default function LandingPage() {
               className="mt-8 flex flex-wrap items-center gap-3"
               data-testid={LANDING.heroCtaPrimary}
             >
-              <button
-                onClick={() => navigate("/workspace")}
-                className="btn-lift inline-flex h-10 items-center gap-2 bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-              >
+              <Button size="lg" onClick={() => navigate("/workspace")}>
                 Start writing, free
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
                 data-testid={LANDING.heroCtaSecondary}
                 onClick={() => navigate("/pricing")}
-                className="btn-lift inline-flex h-10 items-center gap-2 border border-border px-5 text-sm text-foreground hover:bg-foreground hover:text-background transition-colors"
               >
                 Lab manager? Get early access →
-              </button>
+              </Button>
             </motion.div>
             <motion.p
               initial={{ opacity: 0 }}
@@ -254,7 +267,7 @@ export default function LandingPage() {
               className="mt-3 flex items-center gap-2"
             >
               <FreeLnBadge size="sm" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 free · runs in your browser
               </span>
             </motion.p>
@@ -267,7 +280,7 @@ export default function LandingPage() {
             className="md:col-span-7"
           >
             <div className="relative">
-              <div className="absolute -left-6 top-0 hidden font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground md:block [writing-mode:vertical-rl]">
+              <div className="absolute -left-6 top-0 hidden font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground md:block [writing-mode:vertical-rl]">
                 fig. 01 · live editor
               </div>
               <ElnHero />
@@ -278,7 +291,7 @@ export default function LandingPage() {
 
       {/* MARQUEE */}
       <section className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-6 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-5 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground sm:px-6 lg:px-8">
           <span>Made by a wet-lab scientist</span>
           <span>· Every AI action is signed</span>
           <span>· Bring your own Claude</span>
@@ -289,29 +302,22 @@ export default function LandingPage() {
 
       {/* PROBLEM */}
       <section className="dna-bg border-b border-border bg-secondary/20">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mb-12 max-w-2xl">
-            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              § the problem
-            </div>
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+          <div className="mb-8 max-w-2xl">
+            <div className="eyebrow">§ the problem</div>
             <h2 className="mt-2 font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
               AI is already writing your lab notes.<br className="hidden sm:block" /> The record it
               leaves is indefensible.
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-0 border border-border sm:grid-cols-3">
-            {problemPoints.map((p, i) => {
+          <div className="grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-3">
+            {problemPoints.map((p) => {
               const Icon = p.icon;
               return (
-                <div
-                  key={p.title}
-                  className={`flex flex-col p-8 ${i < 2 ? "sm:border-r border-border" : ""} ${
-                    i === 0 ? "" : "border-t sm:border-t-0 border-border"
-                  }`}
-                >
+                <div key={p.title} className="flex flex-col bg-background p-5 sm:p-6">
                   <Icon className="h-5 w-5 text-foreground" strokeWidth={1.4} />
-                  <h3 className="mt-6 font-serif text-xl text-foreground">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+                  <h3 className="mt-5 font-serif text-xl text-foreground">{p.title}</h3>
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">{p.body}</p>
                 </div>
               );
             })}
@@ -320,60 +326,53 @@ export default function LandingPage() {
       </section>
 
       {/* STUDENT FEATURES */}
-      <section id="features" className="mx-auto max-w-6xl px-6 py-24">
-        <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+      <section id="features" className="mx-auto max-w-6xl scroll-mt-14 px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">§</span>
+              <span className="eyebrow">§</span>
               <FreeLnBadge size="sm" />
             </div>
             <h2 className="mt-2 max-w-2xl font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
               Experiments are already hard.{" "}
               <span className="italic text-foreground/85">Your lab notes shouldn't be.</span>
             </h2>
-            <p className="mt-3 text-sm text-muted-foreground">
+            <p className="mt-3 text-base text-muted-foreground">
               Get started now, no account or credit card required.
             </p>
           </div>
-          <button
-            onClick={() => navigate("/workspace")}
-            className="btn-lift inline-flex h-10 items-center gap-2 bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-          >
+          <Button size="lg" onClick={() => navigate("/workspace")}>
             Start writing, free
-          </button>
+          </Button>
         </div>
 
-        <div className="grid grid-cols-1 border border-border sm:grid-cols-2 lg:grid-cols-3">
-          {studentFeatures.map((f, i) => {
+        <div className="grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {studentFeatures.map((f) => {
             const Icon = f.icon;
-            const isRightCol = (i + 1) % 3 === 0;
-            const isLastRow = i >= studentFeatures.length - (studentFeatures.length % 3 || 3);
             return (
               <div
                 key={f.id}
                 data-testid={f.id}
-                className={`group relative flex flex-col p-8 transition-colors ${
-                  f.preview ? "bg-secondary/20" : "hover:bg-secondary/40"
-                }
-                  ${!isRightCol ? "sm:border-r border-border" : ""}
-                  ${!isLastRow ? "border-b border-border" : ""}`}
+                className={`group relative flex flex-col p-5 transition-colors sm:p-6 ${
+                  f.preview ? "bg-secondary" : "bg-background hover:bg-secondary"
+                }`}
               >
                 <div className="flex items-start justify-between">
                   <Icon className={`h-5 w-5 ${f.preview ? "text-foreground/60" : "text-foreground"}`} strokeWidth={1.4} />
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
+                  <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground">
                     {f.label}
                   </span>
                 </div>
-                <h3 className={`mt-6 font-serif text-xl ${f.preview ? "text-foreground/70" : "text-foreground"}`}>
+                <h3 className={`mt-5 font-serif text-xl ${f.preview ? "text-foreground/70" : "text-foreground"}`}>
                   {f.title}
                 </h3>
-                <p className={`mt-2 text-sm leading-relaxed ${f.preview ? "text-muted-foreground/85" : "text-muted-foreground"}`}>
+                <p className={`mt-2 text-base leading-relaxed ${f.preview ? "text-muted-foreground/85" : "text-muted-foreground"}`}>
                   {f.body}
                 </p>
                 {f.preview && (
-                  <span className="mt-4 inline-flex w-fit items-center gap-1 border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+                  <Badge variant="soon" className="mt-4 w-fit gap-1">
                     <Lock className="h-2.5 w-2.5" /> {f.preview}
-                  </span>
+                  </Badge>
                 )}
               </div>
             );
@@ -383,15 +382,13 @@ export default function LandingPage() {
 
       {/* WORK WITH CLAUDE */}
       <section className="border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-24 md:grid-cols-12">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-16 md:grid-cols-12 lg:px-8">
           <div className="md:col-span-6">
-            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              § work with claude
-            </div>
+            <div className="eyebrow">§ work with claude</div>
             <h2 className="mt-2 font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
               Run your notebook from Claude.
             </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
               Claude can draft a protocol from your last three entries, reformat a reagent table,
               or search six months of notebooks for one result, you review and sign. New to
               working with Claude?{" "}
@@ -404,52 +401,46 @@ export default function LandingPage() {
               .
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => navigate("/connect")}
-                className="btn-lift inline-flex h-10 items-center gap-2 bg-foreground px-4 text-sm font-medium text-background hover:opacity-90"
-              >
+              <Button size="lg" onClick={() => navigate("/connect")}>
                 <Plug className="h-3.5 w-3.5" />
                 Add the sci-arch MCP connector to Claude
-              </button>
-              <button
-                onClick={handleCopyConnector}
-                className="btn-lift inline-flex h-10 items-center gap-2 border border-border px-4 text-sm text-foreground hover:bg-foreground hover:text-background transition-colors"
-              >
+              </Button>
+              <Button variant="outline" size="lg" onClick={handleCopyConnector}>
                 <Copy className="h-3.5 w-3.5" />
                 {copied ? "Copied!" : "Copy connector URL"}
-              </button>
+              </Button>
             </div>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="mt-3 font-mono text-xs text-muted-foreground">
               {CONNECTOR_URL}
             </p>
           </div>
           <div className="md:col-span-6">
-            <div className="border border-border bg-secondary/20 p-6">
-              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+            <div className="rounded-[2px] border border-border bg-secondary p-5 sm:p-6">
+              <div className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 audit trail · exp-402
               </div>
               <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex items-center justify-between border-b border-border pb-3">
                   <span className="text-foreground/85">created entry</span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  <span className="font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground">
                     human · r. ford
                   </span>
                 </li>
                 <li className="flex items-center justify-between border-b border-border pb-3">
                   <span className="text-foreground/85">drafted procedure</span>
-                  <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.15em] text-foreground">
+                  <span className="inline-flex items-center gap-1 font-mono text-xs uppercase tracking-[0.15em] text-foreground">
                     <Bot className="h-3 w-3" /> ai-assisted · claude
                   </span>
                 </li>
                 <li className="flex items-center justify-between border-b border-border pb-3">
                   <span className="text-foreground/85">edited reagent table</span>
-                  <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.15em] text-foreground">
+                  <span className="inline-flex items-center gap-1 font-mono text-xs uppercase tracking-[0.15em] text-foreground">
                     <Bot className="h-3 w-3" /> ai-assisted · claude
                   </span>
                 </li>
                 <li className="flex items-center justify-between">
                   <span className="text-foreground/85">signed &amp; locked</span>
-                  <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-700 dark:text-emerald-400">
+                  <span className="inline-flex items-center gap-1 font-mono text-xs uppercase tracking-[0.15em] text-success">
                     <PenLine className="h-3 w-3" /> human · r. ford
                   </span>
                 </li>
@@ -460,60 +451,64 @@ export default function LandingPage() {
       </section>
 
       {/* PRICING */}
-      <div id="pricing">
+      <div id="pricing" className="scroll-mt-14">
         <PricingTable />
       </div>
 
       {/* FAQ */}
-      <section id="faq" data-testid={LANDING.faqSection} className="border-t border-border">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-12">
+      <section id="faq" data-testid={LANDING.faqSection} className="scroll-mt-14 border-t border-border">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:py-16 md:grid-cols-12 lg:px-8">
           <div className="md:col-span-4">
-            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              § questions
-            </div>
+            <div className="eyebrow">§ questions</div>
             <h2 className="mt-2 font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
               Frequently asked.
             </h2>
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p className="mt-4 text-base text-muted-foreground">
               Still curious? Email{" "}
               <a href="mailto:ryan@sci-arch.ca" className="text-foreground underline underline-offset-4">
                 ryan@sci-arch.ca
               </a>
               , or ask directly below.
             </p>
-            <div className="mt-6 border border-border p-4">
-              {faqSent ? (
-                <p className="text-sm text-foreground">
-                  Your email app should have opened. Send it and Ryan will reply at{" "}
-                  <span className="font-mono">{faqEmail}</span>.
-                </p>
-              ) : (
-                <form onSubmit={submitFaqContact} className="space-y-2">
-                  <input
-                    required
-                    type="email"
-                    value={faqEmail}
-                    onChange={(e) => setFaqEmail(e.target.value)}
-                    placeholder="you@lab.edu"
-                    className="h-9 w-full border border-border bg-transparent px-2 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-foreground"
-                  />
-                  <textarea
-                    required
-                    rows={3}
-                    value={faqMessage}
-                    onChange={(e) => setFaqMessage(e.target.value)}
-                    placeholder="Your question"
-                    className="w-full resize-none border border-border bg-transparent px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground"
-                  />
-                  <button
-                    type="submit"
-                    disabled={faqSending}
-                    className="btn-lift h-9 w-full bg-foreground px-4 text-sm font-medium text-background hover:opacity-90 disabled:opacity-50"
+            <div className="mt-6 rounded-[2px] border border-border p-4">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  copyFaqMessage();
+                }}
+                className="space-y-2"
+              >
+                <Input
+                  required
+                  type="email"
+                  value={faqEmail}
+                  onChange={(e) => setFaqEmail(e.target.value)}
+                  placeholder="you@lab.edu"
+                  className="w-full"
+                />
+                <Textarea
+                  required
+                  rows={3}
+                  value={faqMessage}
+                  onChange={(e) => setFaqMessage(e.target.value)}
+                  placeholder="Your question"
+                  className="w-full resize-none"
+                />
+                <Button type="submit" className="w-full">
+                  {faqCopied ? "Copied — paste into any email" : "Copy email + message"}
+                </Button>
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  Copies your message addressed to{" "}
+                  <span className="font-mono">ryan@sci-arch.ca</span>. Or{" "}
+                  <a
+                    href={faqMailto}
+                    className="underline underline-offset-2 hover:text-foreground"
                   >
-                    {faqSending ? "Sending…" : "Send"}
-                  </button>
-                </form>
-              )}
+                    open it in your email app
+                  </a>
+                  .
+                </p>
+              </form>
             </div>
           </div>
           <div className="md:col-span-8">
@@ -526,12 +521,12 @@ export default function LandingPage() {
                   className="border-b border-border"
                 >
                   <AccordionTrigger className="py-5 text-left font-serif text-lg text-foreground hover:no-underline">
-                    <span className="mr-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    <span className="mr-4 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {f.q}
                   </AccordionTrigger>
-                  <AccordionContent className="pb-5 text-sm leading-relaxed text-muted-foreground">
+                  <AccordionContent className="pb-5 text-base leading-relaxed text-muted-foreground">
                     {f.a}
                   </AccordionContent>
                 </AccordionItem>

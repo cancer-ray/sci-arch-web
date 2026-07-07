@@ -77,30 +77,29 @@ export function ToolDock() {
   };
 
   return (
-    <aside
-      className="border-t border-border md:col-span-3 md:border-l md:border-t-0"
-      data-testid="workspace-tool-dock"
-    >
-      <div className="flex items-center justify-between border-b border-border p-2">
-        <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
-          toolbox
+    <aside data-testid="workspace-tool-dock">
+      <div className="flex h-9 items-center justify-between border-b border-border px-2">
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          Toolbox
         </div>
         <div className="relative">
           <button
             onClick={() => setPickerOpen((o) => !o)}
-            className="inline-flex h-6 w-6 items-center justify-center border border-border text-foreground hover:bg-foreground hover:text-background transition-colors"
+            aria-label="Add tool"
+            aria-expanded={pickerOpen}
+            className="inline-flex h-6 w-6 items-center justify-center rounded-[2px] border border-border text-foreground hover:bg-secondary transition-colors"
           >
             <Plus className="h-3 w-3" />
           </button>
           {pickerOpen && (
-            <div className="absolute right-0 top-7 z-20 w-44 border border-border bg-background p-1 shadow-sm">
+            <div className="printed-card absolute right-0 top-7 z-20 w-44 p-1 text-foreground">
               {Object.entries(TOOL_TYPES).map(([type, def]) => {
                 const Icon = def.icon;
                 return (
                   <button
                     key={type}
                     onClick={() => addTool(type)}
-                    className="flex w-full items-center gap-1.5 px-2 py-1.5 text-left text-xs text-foreground hover:bg-secondary transition-colors"
+                    className="flex w-full items-center gap-1.5 rounded-[2px] px-2 py-1.5 text-left text-xs text-foreground hover:bg-secondary transition-colors"
                   >
                     <Icon className="h-3 w-3" /> {def.label}
                   </button>
@@ -123,9 +122,9 @@ export function ToolDock() {
           const Icon = def.icon;
           const Comp = def.Component;
           return (
-            <div key={t.id} className="border border-border">
-              <div className="flex items-center justify-between border-b border-border bg-secondary/30 px-2 py-1">
-                <span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+            <div key={t.id} className="rounded-[2px] border border-border bg-card">
+              <div className="flex items-center justify-between border-b border-border bg-secondary/50 px-2 py-1">
+                <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   <Icon className="h-3 w-3" /> {def.label}
                 </span>
                 <div className="flex items-center gap-0.5">

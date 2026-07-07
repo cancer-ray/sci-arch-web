@@ -1,81 +1,109 @@
-# sci-arch web (freeLN)
+# freeLN
 
-The open-source front end for [sci-arch.ca](https://sci-arch.ca), an AI-native electronic
-lab notebook. This repository is the web app: the marketing site and **freeLN**, the free,
-fully client-side notebook.
+The free, fully-local markdown electronic lab notebook — the client app behind
+[sci-arch.ca](https://sci-arch.ca). It runs entirely in your browser: open your
+`.md` files or a notebook folder, write, search, and export. **Nothing is ever
+uploaded** — your notes never leave your device. That claim is why this client
+is open source: you can read the code and verify it.
 
-> **Positioning.** Every ELN can add AI. sci-arch makes the AI's work *defensible*:
-> attributable, versioned, tamper-evident, and signed by a human. An AI can draft; only a
-> human signs and locks a record.
+The paid cloud tiers (**sci-arch+**: soloLN / groupLN) are a separate,
+proprietary product and are **not** included in this repository.
 
-## Private by design, and you can verify it
+---
 
-freeLN has **no account and no server**. When you open a note or drop in a folder, the files
-are read in your browser, rendered in your browser, and autosaved to your browser's own
-`localStorage`. Nothing is uploaded to sci-arch or anywhere else. Close the tab and your
-files stay on your disk, right where they were.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-That claim is checkable because this front end is open source. The whole freeLN loader is one
-small, readable file: [`src/lib/folder.js`](src/lib/folder.js). It uses the browser File API
-(`file.text()`, `URL.createObjectURL`) and `localStorage`. There is no `fetch`, no upload, and
-no analytics in the freeLN path. See [docs/PRIVACY.md](docs/PRIVACY.md) for the full model.
+## Available Scripts
 
-## What is in this repo
+In the project directory, you can run:
 
-This is the **front end only**. It is a static React app that runs standalone: freeLN needs
-no backend and no environment variables. The paid cloud tiers (**soloLN**, **groupLN**, sold
-together as sci-arch+) talk to a separate, private Fastify backend that owns the GMP audit
-engine, e-signatures, and billing. That backend is not part of this repository.
+### `npm start`
 
-## Quickstart
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-```bash
-yarn install
-yarn start     # dev server on http://localhost:3200
-yarn build     # production build to ./build
-```
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-Requires Node 18+ and Yarn (the `resolutions` field is load-bearing, so use Yarn, not npm).
+### `npm test`
 
-## Configuration
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-freeLN runs with no configuration. The cloud tier reads a few **public**, browser-shipped
-values from `.env` (copy from [`.env.example`](.env.example)):
+### `npm run build`
 
-- `REACT_APP_SUPABASE_URL` and `REACT_APP_SUPABASE_ANON_KEY`: the Supabase project URL and the
-  publishable anon key. These are safe in the browser; row-level security governs access.
-- `REACT_APP_BACKEND_URL`: the Fastify backend base URL (the sci-arch+ API).
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-No secret keys ever live in the front end.
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Project structure
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```
-src/
-  pages/         Landing, Pricing, Workspace, About, Connect, Compliance, Privacy, Terms, ...
-  components/    Nav, Footer, ElnHero, PricingTable, FolderDrop, tools/ (calculator, etc.)
-  context/       ThemeContext (light/dark + accent), WorkspaceContext, AuthContext
-  lib/
-    folder.js    The freeLN engine: client-side folder/file loader (read-only, in-browser)
-    api.js       axios client for the sci-arch+ backend (cloud tiers only)
-    supabase.js  Supabase browser client (auth for cloud tiers only)
-public/          index.html (SEO/OG/schema), favicon, robots.txt, sitemap.xml
-docs/            ARCHITECTURE.md, PRIVACY.md
-```
+### `npm run eject`
 
-## Tech stack
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-React 19, Create React App via craco, Tailwind CSS, framer-motion, react-router 7,
-react-markdown + remark-gfm, lucide-react. Editorial design system: Spectral serif + IBM Plex
-Sans/Mono, 1px borders, 2px radius, no shadows or gradients.
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Contributing
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). The one rule
-that matters most: **do not add anything to the freeLN path that sends user data off the
-machine.** Local-only is the product promise, not a nice-to-have.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 ## License
 
-[MIT](LICENSE), copyright Ryan Lee. Built and bootstrapped solo.
-Product: [sci-arch.ca](https://sci-arch.ca). Not legal or compliance advice.
+freeLN (this `frontend/` client) is licensed under the **Apache License 2.0** —
+see [`LICENSE`](./LICENSE) and [`NOTICE`](./NOTICE). You're free to use, modify,
+and redistribute it, including commercially, subject to the license terms
+(attribution, stating changes, the patent grant, and the trademark limits
+below).
+
+The **sci-arch+** backend (the GMP hash-chain audit engine, sign/lock,
+compliance package, and billing) is a separate, proprietary product and is not
+covered by this license.
+
+Contributions are welcome under the same license and a lightweight DCO sign-off
+— see [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+
+## Trademarks
+
+The Apache License grants rights to the **code**, not to the **brand**. Per
+Apache-2.0 §6, it does **not** license the names **"freeLN"**, **"sci-arch"**,
+or **"sci-arch+"**, or the sci-arch logo, which are trademarks of Ryan Lee /
+sci-arch.
+
+You may state, factually, that your project is built on or derived from freeLN.
+You may **not** use these names or the logo as the name or branding of a fork,
+a redistribution, or a product/service in a way that implies it is the official
+freeLN or sci-arch, or is endorsed by sci-arch. If you fork and distribute,
+please rename. Questions: ryan@sci-arch.ca.

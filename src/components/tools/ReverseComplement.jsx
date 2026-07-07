@@ -52,7 +52,7 @@ export function ReverseComplement() {
 
   return (
     <div>
-      <div className="mb-2 inline-flex border border-border font-mono text-[9px] uppercase tracking-[0.15em]">
+      <div className="mb-2 inline-flex rounded-[2px] border border-border font-mono text-[10px] uppercase tracking-[0.14em]">
         {[
           { id: "revcomp", label: "rev-comp" },
           { id: "comp", label: "comp" },
@@ -62,7 +62,9 @@ export function ReverseComplement() {
             key={m.id}
             onClick={() => setMode(m.id)}
             className={`px-2 py-1 transition-colors ${
-              mode === m.id ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              mode === m.id
+                ? "bg-primary/10 text-primary shadow-[inset_0_-2px_0_hsl(var(--primary))]"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
             }`}
           >
             {m.label}
@@ -75,20 +77,24 @@ export function ReverseComplement() {
         placeholder="ATGCATGC…"
         rows={2}
         spellCheck={false}
-        className={`w-full resize-none border bg-transparent px-2 py-1.5 font-mono text-xs focus:outline-none ${
+        className={`w-full resize-none rounded-[2px] border bg-transparent px-2 py-1.5 font-mono text-xs ${
           valid ? "border-border" : "border-destructive"
         }`}
       />
       {!valid && <p className="mt-1 text-[10px] text-destructive">Not a valid IUPAC sequence.</p>}
       {output && (
-        <div className="mt-2 flex items-start gap-1 border border-border bg-secondary/30 p-2">
+        <div className="mt-2 flex items-start gap-1 rounded-[2px] border border-border bg-secondary/50 p-2">
           <span className="flex-1 break-all font-mono text-xs text-foreground">{output}</span>
-          <button onClick={copy} className="flex-none text-muted-foreground hover:text-foreground transition-colors">
+          <button
+            onClick={copy}
+            aria-label="Copy result"
+            className="flex-none rounded-[2px] p-0.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+          >
             <Copy className="h-3 w-3" />
           </button>
         </div>
       )}
-      {copied && <p className="mt-1 text-[10px] text-muted-foreground">Copied.</p>}
+      {copied && <p className="mt-1 font-mono text-[10px] text-success">Copied.</p>}
     </div>
   );
 }

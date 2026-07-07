@@ -6,48 +6,56 @@
 
 @layer base {
     :root {
-        --background: 40 20% 98%;      /* off-white paper #FAF9F6 */
-        --foreground: 0 0% 7%;          /* ink #111 */
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 7%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 7%;
-        --primary: 224 76% 40%;
+        --background: 48 24% 96%;       /* warm paper #F7F6F2 */
+        --foreground: 45 11% 7%;        /* warm ink #141310 */
+        --card: 0 0% 100%;              /* #FFFFFF */
+        --card-foreground: 45 11% 7%;
+        --popover: 0 0% 100%;           /* #FFFFFF */
+        --popover-foreground: 45 11% 7%;
+        --primary: 226 71% 40%;         /* cobalt #1E40AF */
         --primary-foreground: 0 0% 100%;
-        --secondary: 40 15% 94%;
-        --secondary-foreground: 0 0% 7%;
-        --muted: 40 12% 92%;
-        --muted-foreground: 0 0% 45%;
-        --accent: 40 15% 94%;
-        --accent-foreground: 0 0% 7%;
-        --destructive: 0 74% 42%;
+        --secondary: 47 22% 92%;        /* #EFEDE6 */
+        --secondary-foreground: 45 11% 7%;
+        --muted: 47 22% 92%;            /* #EFEDE6 */
+        --muted-foreground: 42 6% 39%;  /* #6B675E */
+        --accent: 47 22% 92%;           /* = secondary */
+        --accent-foreground: 45 11% 7%;
+        --destructive: 3 71% 41%;       /* #B3261E */
         --destructive-foreground: 0 0% 100%;
-        --border: 0 0% 90%;
-        --input: 0 0% 90%;
-        --ring: 224 76% 40%;
+        --success: 153 66% 25%;         /* #166B45 */
+        --success-foreground: 0 0% 100%;
+        --warning: 34 87% 32%;          /* #9A5B0B */
+        --warning-foreground: 0 0% 100%;
+        --border: 45 17% 86%;           /* ledger line #E2DFD6 */
+        --input: 45 17% 86%;
+        --ring: 226 71% 40%;
         --radius: 2px;
     }
 
     .dark {
-        --background: 0 0% 4%;
-        --foreground: 0 0% 93%;
-        --card: 0 0% 8%;
-        --card-foreground: 0 0% 93%;
-        --popover: 0 0% 8%;
-        --popover-foreground: 0 0% 93%;
-        --primary: 217 91% 60%;
-        --primary-foreground: 0 0% 100%;
-        --secondary: 0 0% 12%;
-        --secondary-foreground: 0 0% 93%;
-        --muted: 0 0% 14%;
-        --muted-foreground: 0 0% 64%;
-        --accent: 0 0% 14%;
-        --accent-foreground: 0 0% 93%;
-        --destructive: 0 63% 42%;
+        --background: 0 0% 6%;          /* #101010 */
+        --foreground: 45 17% 91%;       /* #EBE9E3 */
+        --card: 60 2% 10%;              /* #191918 */
+        --card-foreground: 45 17% 91%;
+        --popover: 36 8% 12%;           /* #211F1C */
+        --popover-foreground: 45 17% 91%;
+        --primary: 225 84% 76%;         /* #8FA8F5 */
+        --primary-foreground: 0 0% 6%;  /* #101010 */
+        --secondary: 45 6% 12%;         /* #21201D */
+        --secondary-foreground: 45 17% 91%;
+        --muted: 45 6% 12%;             /* #21201D */
+        --muted-foreground: 42 8% 58%;  /* #9C978B */
+        --accent: 45 6% 12%;            /* = secondary */
+        --accent-foreground: 45 17% 91%;
+        --destructive: 5 84% 68%;       /* #F2766B */
         --destructive-foreground: 0 0% 100%;
-        --border: 0 0% 15%;
-        --input: 0 0% 15%;
-        --ring: 217 91% 60%;
+        --success: 153 48% 48%;         /* #3FB57F */
+        --success-foreground: 0 0% 100%;
+        --warning: 39 68% 54%;          /* #D9A038 */
+        --warning-foreground: 0 0% 100%;
+        --border: 45 5% 16%;            /* #2B2A27 */
+        --input: 45 5% 16%;
+        --ring: 225 84% 76%;
     }
 
     /* Accent picker overrides. "cobalt" (the default) needs no rule here — it
@@ -252,6 +260,271 @@
 }
 
 :focus-visible {
-    outline: 1px solid hsl(var(--ring));
+    outline: 2px solid hsl(var(--primary));
     outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────
+   Design-system foundation classes
+   ───────────────────────────────────────────── */
+
+/* Eyebrow — mono micro-label above serif headings */
+.eyebrow {
+    @apply font-mono;
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+}
+
+/* Printed card — flat paper card with a 1px "offset print" shadow */
+.printed-card {
+    background: hsl(var(--popover));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 2px 2px 0 hsl(var(--border));
+    border-radius: 2px;
+}
+
+/* ─────────────────────────────────────────────
+   .prose-eln — editorial typography for rendered markdown
+   (element selectors: react-markdown output has no utility classes)
+   ───────────────────────────────────────────── */
+.prose-eln {
+    @apply font-sans;
+    max-width: 72ch;
+    font-size: 15px;
+    line-height: 1.7;
+    color: hsl(var(--foreground));
+}
+.prose-eln > :first-child { margin-top: 0; }
+.prose-eln > :last-child { margin-bottom: 0; }
+.prose-eln h1,
+.prose-eln h2,
+.prose-eln h3 {
+    @apply font-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+}
+.prose-eln h1 { font-size: 1.75rem; line-height: 1.15; margin: 2rem 0 0.75rem; }
+.prose-eln h2 {
+    font-size: 1.375rem;
+    line-height: 1.2;
+    margin: 1.75rem 0 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid hsl(var(--border));
+}
+.prose-eln h3 { font-size: 1.125rem; line-height: 1.25; margin: 1.5rem 0 0.375rem; }
+.prose-eln h4,
+.prose-eln h5,
+.prose-eln h6 {
+    @apply font-mono;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 1.25rem 0 0.25rem;
+    color: hsl(var(--muted-foreground));
+}
+.prose-eln p { margin: 0.75rem 0; }
+.prose-eln a {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.prose-eln strong { font-weight: 600; }
+.prose-eln ul,
+.prose-eln ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+}
+.prose-eln ul { list-style: disc; }
+.prose-eln ol { list-style: decimal; }
+.prose-eln li { margin: 0.25rem 0; }
+.prose-eln li::marker { color: hsl(var(--muted-foreground)); }
+.prose-eln blockquote {
+    margin: 1rem 0;
+    padding: 0.25rem 0 0.25rem 1rem;
+    border-left: 2px solid hsl(var(--primary));
+    font-style: italic;
+    color: hsl(var(--muted-foreground));
+}
+.prose-eln hr {
+    margin: 1.5rem 0;
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+}
+/* Inline code — chip, not block */
+.prose-eln code {
+    @apply font-mono;
+    font-size: 0.8125em;
+    display: inline;
+    padding: 0.0625rem 0.3125rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 2px;
+    background: hsl(var(--secondary) / 0.6);
+    white-space: nowrap;
+}
+/* Code blocks — reset the chip look inside pre */
+.prose-eln pre {
+    @apply font-mono;
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 2px;
+    background: hsl(var(--secondary) / 0.4);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+.prose-eln pre code {
+    display: inline;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: inherit;
+    white-space: pre;
+}
+/* Tables — ledger style */
+.prose-eln table {
+    margin: 1rem 0;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid hsl(var(--border));
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+}
+.prose-eln thead th {
+    @apply font-mono;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 0.375rem 0.625rem;
+    background: hsl(var(--secondary) / 0.7);
+    border-bottom: 1px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+}
+.prose-eln tbody td {
+    padding: 0.375rem 0.625rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.6);
+}
+.prose-eln tbody tr:nth-child(even) td {
+    background: hsl(var(--secondary) / 0.3);
+}
+.prose-eln img {
+    max-width: 100%;
+    margin: 1rem 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 2px;
+}
+
+/* ─────────────────────────────────────────────
+   WYSIWYG surface — styles bare elements produced by contentEditable /
+   execCommand (which arrive without utility classes) so the "directly editable
+   preview" looks the same as the react-markdown render even mid-edit.
+   ───────────────────────────────────────────── */
+.wysiwyg-surface { font-size: 0.875rem; line-height: 1.6; }
+.wysiwyg-surface:empty::before {
+    content: "Start writing…";
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+}
+.wysiwyg-surface > :first-child { margin-top: 0; }
+.wysiwyg-surface h1 { font-family: "Spectral", ui-serif, Georgia, serif; font-size: 1.875rem; line-height: 1.15; margin: 0.5rem 0 0; }
+.wysiwyg-surface h2 { font-family: "Spectral", ui-serif, Georgia, serif; font-size: 1.5rem; line-height: 1.2; margin: 1.5rem 0 0; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 0.25rem; }
+.wysiwyg-surface h3 { font-family: "Spectral", ui-serif, Georgia, serif; font-size: 1.25rem; margin: 1.25rem 0 0; }
+.wysiwyg-surface p { margin: 0.75rem 0 0; color: hsl(var(--foreground) / 0.85); }
+.wysiwyg-surface ul { margin: 0.5rem 0 0; padding-left: 1.5rem; list-style: disc; }
+.wysiwyg-surface ol { margin: 0.5rem 0 0; padding-left: 1.5rem; list-style: decimal; }
+.wysiwyg-surface li { margin-top: 0.25rem; color: hsl(var(--foreground) / 0.85); }
+.wysiwyg-surface a { color: hsl(var(--primary)); text-decoration: underline; text-underline-offset: 2px; }
+.wysiwyg-surface strong { font-weight: 600; }
+.wysiwyg-surface em { font-style: italic; }
+.wysiwyg-surface code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.8125rem; border: 1px solid hsl(var(--border)); background: hsl(var(--secondary) / 0.5); padding: 0 0.25rem; }
+.wysiwyg-surface blockquote { margin: 0.75rem 0; border-left: 2px solid hsl(var(--border)); padding-left: 0.75rem; font-style: italic; color: hsl(var(--muted-foreground)); }
+.wysiwyg-surface table { margin: 1rem 0; width: 100%; border-collapse: collapse; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.6875rem; }
+.wysiwyg-surface th { border-bottom: 1px solid hsl(var(--border)); padding: 0.25rem 0.5rem; text-align: left; font-weight: 500; }
+.wysiwyg-surface td { border-bottom: 1px solid hsl(var(--border) / 0.5); padding: 0.25rem 0.5rem; color: hsl(var(--foreground) / 0.85); }
+.wysiwyg-surface img { margin: 1rem 0; max-width: 100%; border: 1px solid hsl(var(--border)); }
+
+/* Splitter handle between resizable workspace panels. */
+.ws-resizer {
+    flex: 0 0 auto;
+    cursor: col-resize;
+    background: transparent;
+    position: relative;
+    user-select: none;
+    touch-action: none;
+}
+.ws-resizer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 1px;
+    background: hsl(var(--border));
+}
+.ws-resizer:hover::before, .ws-resizer[data-dragging="true"]::before {
+    width: 2px;
+    background: hsl(var(--primary));
+}
+
+/* ─────────────────────────────────────────────
+   Print export ("Export note (PDF)") — Workspace portals the active note's
+   rendered markdown into a body-level .print-surface and sets body.printing
+   before window.print(). On screen the surface never shows; in the print
+   dialog it is the ONLY thing that shows. Both the class and the surface are
+   removed again on the window 'afterprint' event.
+   ───────────────────────────────────────────── */
+.print-surface {
+    display: none;
+}
+
+@media print {
+    /* Hide every other body child (#root, toaster/dialog portals, …). */
+    body.printing > *:not(.print-surface) {
+        display: none !important;
+    }
+    body.printing .print-surface {
+        display: block !important;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+    }
+    /* Force print-safe ink regardless of the on-screen theme (dark-mode
+       foreground vars would print near-white text on white paper). */
+    body.printing .print-surface,
+    body.printing .print-surface * {
+        color: #111 !important;
+        background: #fff !important;
+        border-color: #bbb !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    body.printing .print-surface .prose-eln {
+        max-width: none;
+        font-size: 11pt;
+        line-height: 1.55;
+    }
+    body.printing .print-surface .prose-eln a {
+        text-decoration: underline;
+    }
+    body.printing .print-surface .prose-eln img,
+    body.printing .print-surface .prose-eln table,
+    body.printing .print-surface .prose-eln pre {
+        break-inside: avoid;
+        max-width: 100%;
+    }
+    body.printing .print-surface .prose-eln h1,
+    body.printing .print-surface .prose-eln h2,
+    body.printing .print-surface .prose-eln h3 {
+        break-after: avoid;
+    }
 }

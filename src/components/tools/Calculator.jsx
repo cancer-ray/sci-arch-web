@@ -21,20 +21,24 @@ function Field({ label, value, onChange, solvedIdx, idx, unit }) {
   const solved = solvedIdx === idx;
   return (
     <label className="block">
-      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
-      <div className="mt-1 flex items-center gap-1 border border-border">
+      <div
+        className={`mt-1 flex items-center gap-1 rounded-[2px] border ${
+          solved ? "border-primary bg-primary/10" : "border-border"
+        }`}
+      >
         <input
           type="number"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="—"
           className={`h-7 w-full border-none bg-transparent px-2 font-mono text-xs focus:outline-none ${
-            solved ? "text-foreground" : ""
+            solved ? "text-primary" : ""
           }`}
         />
-        <span className="pr-2 font-mono text-[9px] text-muted-foreground">{unit}</span>
+        <span className="pr-2 font-mono text-[10px] text-muted-foreground">{unit}</span>
       </div>
     </label>
   );
@@ -70,13 +74,15 @@ export function Calculator() {
 
   return (
     <div>
-      <div className="mb-3 inline-flex border border-border font-mono text-[9px] uppercase tracking-[0.15em]">
+      <div className="mb-3 inline-flex rounded-[2px] border border-border font-mono text-[10px] uppercase tracking-[0.14em]">
         {["dilution", "molarity"].map((m) => (
           <button
             key={m}
             onClick={() => setMode(m)}
             className={`px-2 py-1 transition-colors ${
-              mode === m ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              mode === m
+                ? "bg-primary/10 text-primary shadow-[inset_0_-2px_0_hsl(var(--primary))]"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
             }`}
           >
             {m}

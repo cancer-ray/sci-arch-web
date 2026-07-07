@@ -4,6 +4,8 @@ import { Loader2, CheckCircle2, XCircle, ArrowUpRight } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { CHECKOUT } from "@/constants/testIds";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function CheckoutSuccess() {
   const params = new URLSearchParams(window.location.search);
@@ -19,11 +21,9 @@ export default function CheckoutSuccess() {
   return (
     <div className="min-h-screen bg-background text-foreground" data-testid={CHECKOUT.successRoot}>
       <Nav />
-      <main className="mx-auto max-w-2xl px-6 py-24">
-        <div className="border border-border p-10">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-            § checkout
-          </div>
+      <main className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <div className="max-w-[65ch] rounded-[2px] border border-border bg-card p-5 sm:p-6">
+          <div className="eyebrow">§ checkout</div>
 
           {status === "checking" && (
             <div className="mt-4">
@@ -41,7 +41,7 @@ export default function CheckoutSuccess() {
           {status === "paid" && (
             <div className="mt-4">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <CheckCircle2 className="h-6 w-6 text-success" />
                 <h1 className="font-serif text-3xl">Subscription active.</h1>
               </div>
               <p
@@ -54,7 +54,7 @@ export default function CheckoutSuccess() {
                 <Link
                   to="/dashboard"
                   data-testid={CHECKOUT.successCta}
-                  className="inline-flex h-10 items-center gap-2 bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
+                  className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
                 >
                   Open dashboard <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -81,13 +81,13 @@ export default function CheckoutSuccess() {
               <div className="mt-8 flex gap-3">
                 <Link
                   to="/pricing"
-                  className="inline-flex h-10 items-center gap-2 border border-border px-5 text-sm text-foreground hover:bg-foreground hover:text-background"
+                  className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
                 >
                   Back to pricing
                 </Link>
                 <Link
                   to="/dashboard"
-                  className="inline-flex h-10 items-center gap-2 bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
+                  className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
                 >
                   Dashboard
                 </Link>

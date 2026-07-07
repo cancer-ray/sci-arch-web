@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Menu, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useWorkspace } from "@/context/WorkspaceContext";
 import { SettingsMenu } from "@/components/SettingsMenu";
+import { Button } from "@/components/ui/button";
 import { LogoMark, Wordmark } from "@/components/Logo";
 import { FolderDrop } from "@/components/FolderDrop";
 import { ContactSalesDialog } from "@/components/ContactSalesDialog";
+import { ev } from "@/lib/analytics";
 import { NAV } from "@/constants/testIds";
 
 export function Nav() {
@@ -15,10 +18,17 @@ export function Nav() {
   const location = useLocation();
   const navigate = useNavigate();
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleFolder = (ws) => {
     setWorkspace(ws);
     toast.success(`Loaded ${ws.markdown.length} markdown file${ws.markdown.length === 1 ? "" : "s"}`);
+    ev("start_freeln", { via: "folder" });
+    navigate("/workspace");
+  };
+
+  const openNotebook = (via) => {
+    ev("start_freeln", { via: via || "cta" });
     navigate("/workspace");
   };
 
@@ -48,7 +58,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/85 backdrop-blur-sm">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Link
             to="/"
@@ -66,13 +76,6 @@ export function Nav() {
               className={linkCls("/")}
             >
               Overview
-            </Link>
-            <Link
-              to="/workspace"
-              data-testid={NAV.workspaceLink}
-              className={linkCls("/workspace")}
-            >
-              Workspace
             </Link>
             <Link
               to="/#features"
@@ -100,36 +103,126 @@ export function Nav() {
         </div>
         <div className="flex items-center gap-2">
           <SettingsMenu />
-          <FolderDrop variant="compact" onLoaded={handleFolder} testid={NAV.openFolderBtn} />
+          <div className="hidden sm:block">
+            <FolderDrop variant="compact" onLoaded={handleFolder} testid={NAV.openFolderBtn} />
+          </div>
           {user ? (
             <>
               <Link
                 to="/dashboard"
                 data-testid={NAV.dashboardBtn}
-                className="btn-lift inline-flex h-8 items-center gap-2 border border-border px-3 text-xs tracking-tight text-foreground hover:bg-foreground hover:text-background transition-colors"
+                className="hidden h-8 items-center gap-2 rounded-[2px] border border-border px-3 text-xs tracking-tight text-foreground transition-colors hover:bg-secondary sm:inline-flex"
               >
                 Dashboard
               </Link>
               <button
                 data-testid={NAV.signOutBtn}
                 onClick={handleSignOut}
-                className="h-8 px-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="hidden h-8 px-3 text-xs text-muted-foreground hover:text-foreground transition-colors sm:block"
               >
                 Sign out
               </button>
             </>
           ) : (
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               data-testid={NAV.signInBtn}
               onClick={() => setWaitlistOpen(true)}
-              title="Sign-in is for sci-arch+, launching soon"
-              className="btn-lift h-8 border border-border px-3 text-xs text-foreground hover:bg-foreground hover:text-background transition-colors"
+              title="Sign-in is for sci-arch+, coming soon"
+              className="hidden sm:inline-flex"
             >
-              sci-arch+: get early access
-            </button>
+              <span className="hidden lg:inline">Get early access</span>
+              <span className="lg:hidden">Early access</span>
+            </Button>
           )}
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => openNotebook("nav")}
+            className="hidden sm:inline-flex"
+          >
+            Open notebook
+          </Button>
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-[2px] border border-border text-foreground transition-colors hover:bg-secondary md:hidden"
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu panel */}
+      {menuOpen && (
+        <div className="border-t border-border bg-background md:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6 lg:px-8">
+            {[
+              { to: "/#top", label: "Overview", id: "top" },
+              { to: "/#features", label: "Features", id: "features" },
+              { to: "/pricing", label: "Pricing" },
+              { to: "/about", label: "About" },
+              { to: "/#faq", label: "FAQ", id: "faq" },
+            ].map((l) => (
+              <Link
+                key={l.label}
+                to={l.to}
+                onClick={(e) => {
+                  if (l.id) anchorScroll(e, l.id);
+                  setMenuOpen(false);
+                }}
+                className="border-b border-border/60 py-2.5 text-sm text-foreground/80 last:border-b-0 hover:text-foreground"
+              >
+                {l.label}
+              </Link>
+            ))}
+            <div className="flex flex-wrap items-center gap-2 py-3">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setMenuOpen(false);
+                  openNotebook("nav-mobile");
+                }}
+              >
+                Open notebook
+              </Button>
+              <FolderDrop variant="compact" onLoaded={handleFolder} testid={NAV.openFolderBtn} />
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-flex h-8 items-center rounded-[2px] border border-border px-3 text-xs text-foreground transition-colors hover:bg-secondary"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="h-8 px-3 text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setWaitlistOpen(true);
+                    setMenuOpen(false);
+                  }}
+                >
+                  Get early access
+                </Button>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
       <ContactSalesDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} variant="waitlist" defaultSeats={1} />
     </header>
   );

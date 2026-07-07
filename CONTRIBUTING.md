@@ -1,41 +1,39 @@
-# Contributing to sci-arch web
+# Contributing to freeLN
 
-Thanks for taking a look. This is the open-source front end for sci-arch.ca, maintained solo,
-so please keep changes focused and easy to review.
+Thanks for your interest in freeLN, the free, fully-local markdown lab notebook.
+
+## License of contributions
+
+freeLN is released under the **Apache License 2.0** (see [`LICENSE`](./LICENSE)).
+By contributing, you agree that your contributions are licensed under the same
+terms — inbound = outbound. Apache-2.0 permits commercial and proprietary use,
+so accepted contributions may also ship in the paid **sci-arch+** product.
+
+## Developer Certificate of Origin (DCO)
+
+We use the [DCO](https://developercertificate.org/) instead of a CLA. It's a
+lightweight, one-line attestation that you wrote (or have the right to submit)
+the change. Sign off every commit:
+
+```bash
+git commit -s -m "your message"
+```
+
+This appends a `Signed-off-by: Your Name <you@example.com>` trailer, certifying
+the DCO. Commits without a sign-off can't be merged.
 
 ## Ground rules
 
-1. **Local-only is sacred in freeLN.** Do not add anything to the freeLN path
-   (`src/pages/Workspace.jsx`, `src/context/WorkspaceContext.jsx`, `src/lib/folder.js`, and
-   the tools) that sends user data off the machine: no `fetch`, no uploads, no analytics, no
-   third-party scripts. The privacy promise is the product. If a feature needs a server, it
-   belongs in the sci-arch+ (cloud) path, gated behind sign-in, not in freeLN.
-2. **No em dashes in copy.** House style. Use commas, colons, or periods.
-3. **Match the design system.** Spectral serif + IBM Plex Sans/Mono, 1px borders, 2px radius,
-   no shadows or gradients. Tailwind utilities, no new UI framework.
-4. **Honesty rule for compliance copy.** Records are "Part 11-aligned," never "certified."
-   Do not claim the software alone makes anyone compliant.
+- freeLN is **100% client-side** — it must never send a user's notebook content
+  or files off the machine. PRs that add network calls touching note content
+  will be declined. Keeping this verifiable is the whole reason the client is
+  open source.
+- Match the existing style (dependency-light; the app runs standalone with no
+  backend or env vars).
+- `yarn build` must pass.
 
-## Getting set up
+## Trademarks
 
-```bash
-yarn install
-yarn start     # http://localhost:3200
-yarn build     # sanity-check the production build before opening a PR
-```
-
-Use Yarn, not npm: the `resolutions` in `package.json` are load-bearing for the CRA/craco
-dependency tree.
-
-## Pull requests
-
-- Keep PRs small and single-purpose.
-- Run `yarn build` and confirm it compiles cleanly.
-- Describe what changed and why. Screenshots help for anything visual.
-- If your change touches the freeLN data path, say explicitly how you confirmed nothing leaves
-  the browser.
-
-## Reporting issues
-
-Open a GitHub issue, or email ryan@sci-arch.ca. Security-sensitive reports: please email
-rather than filing a public issue.
+The Apache License covers the **code**, not the **name**. "freeLN", "sci-arch",
+and the sci-arch logo are trademarks — a fork must use a different name and
+branding. See the "Trademarks" section of the [README](./README.md).

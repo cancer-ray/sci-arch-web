@@ -1,6 +1,5 @@
+# sci-arch — https://sci-arch.ca
 User-agent: *
 Allow: /
-Disallow: /dashboard
-Disallow: /auth
 
 Sitemap: https://sci-arch.ca/sitemap.xml

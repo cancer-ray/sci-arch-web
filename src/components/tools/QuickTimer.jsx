@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Play, Pause, RotateCcw, X, Plus } from "lucide-react";
 
 const TIMERS_KEY = "sciarch_quick_timers";
@@ -60,12 +60,23 @@ function fmt(ms) {
   return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
 }
 
+// Ask for notification permission once, on the first timer start. Guarded:
+// Notification may be absent (unsupported browser / non-secure context).
+function ensureNotificationPermission() {
+  try {
+    if (typeof window !== "undefined" && window.Notification && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  } catch {
+    // unsupported — ignore
+  }
+}
+
 export function QuickTimer() {
   const [timers, setTimers] = useState(loadTimers);
   const [, forceTick] = useState(0);
   const [name, setName] = useState("");
   const [mins, setMins] = useState(10);
-  const firedRef = useRef(new Set());
 
   useEffect(() => {
     const iv = setInterval(() => forceTick((n) => n + 1), 1000);
@@ -76,19 +87,25 @@ export function QuickTimer() {
     saveTimers(timers);
   }, [timers]);
 
+  // Runs after every render (incl. the 1s ticks) so expiry is noticed, but the
+  // persisted `fired` flag guarantees each timer chimes exactly once — even
+  // across remounts/reloads, which the old in-memory Set could not. Intentionally
+  // no dependency array: the `fired` guard makes the setTimers call idempotent.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    timers.forEach((t) => {
-      if (t.endsAt != null && remainingOf(t) === 0 && !firedRef.current.has(t.id)) {
-        firedRef.current.add(t.id);
-        playChime();
-        if (window.Notification && Notification.permission === "granted") {
-          new Notification(`${t.name} done`);
-        }
-      }
-    });
-  }, [timers]);
+    const due = timers.filter((t) => t.endsAt != null && !t.fired && remainingOf(t) === 0);
+    if (due.length === 0) return;
+    playChime();
+    if (window.Notification && Notification.permission === "granted") {
+      due.forEach((t) => new Notification(`${t.name} done`));
+    }
+    setTimers((ts) => (
+      ts.map((t) => (due.some((d) => d.id === t.id) ? { ...t, fired: true } : t))
+    ));
+  });
 
   const addTimer = (label, minutes) => {
+    ensureNotificationPermission();
     const totalMs = minutes * 60_000;
     setTimers((ts) => [
       ...ts,
@@ -108,7 +125,9 @@ export function QuickTimer() {
     );
 
   const reset = (id) =>
-    setTimers((ts) => ts.map((t) => (t.id === id ? { ...t, endsAt: null, remainingMs: t.totalMs } : t)));
+    setTimers((ts) =>
+      ts.map((t) => (t.id === id ? { ...t, endsAt: null, remainingMs: t.totalMs, fired: false } : t))
+    );
 
   const remove = (id) => setTimers((ts) => ts.filter((t) => t.id !== id));
 
@@ -119,7 +138,7 @@ export function QuickTimer() {
           <button
             key={p.label}
             onClick={() => addTimer(p.label, p.minutes)}
-            className="border border-border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-foreground hover:bg-foreground hover:text-background transition-colors"
+            className="rounded-[2px] border border-border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-foreground hover:bg-secondary transition-colors"
           >
             {p.label}
           </button>
@@ -130,22 +149,23 @@ export function QuickTimer() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="name"
-          className="h-7 w-20 border border-border bg-transparent px-1.5 font-mono text-xs focus:outline-none"
+          className="h-7 w-20 rounded-[2px] border border-border bg-transparent px-1.5 font-mono text-xs"
         />
         <input
           type="number"
           min={1}
           value={mins}
           onChange={(e) => setMins(Number(e.target.value) || 1)}
-          className="h-7 w-14 border border-border bg-transparent px-1.5 font-mono text-xs focus:outline-none"
+          className="h-7 w-14 rounded-[2px] border border-border bg-transparent px-1.5 font-mono text-xs"
         />
-        <span className="text-[10px] text-muted-foreground">min</span>
+        <span className="font-mono text-[10px] text-muted-foreground">min</span>
         <button
           onClick={() => {
             addTimer(name.trim() || "Timer", mins);
             setName("");
           }}
-          className="ml-auto inline-flex h-7 w-7 items-center justify-center border border-border text-foreground hover:bg-foreground hover:text-background transition-colors"
+          aria-label="Add timer"
+          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-[2px] border border-border text-foreground hover:bg-secondary transition-colors"
         >
           <Plus className="h-3 w-3" />
         </button>
@@ -160,15 +180,13 @@ export function QuickTimer() {
             return (
               <li
                 key={t.id}
-                className={`flex items-center justify-between border px-2 py-1.5 ${
-                  done ? "border-emerald-600/60" : "border-border"
+                className={`flex items-center justify-between rounded-[2px] border px-2 py-1.5 ${
+                  done ? "border-success bg-success/10" : "border-border"
                 }`}
               >
                 <div className="min-w-0">
                   <div className="truncate text-xs text-foreground">{t.name}</div>
-                  <div
-                    className={`font-mono text-sm ${done ? "text-emerald-700 dark:text-emerald-400" : "text-foreground"}`}
-                  >
+                  <div className={`font-mono text-sm ${done ? "text-success" : "text-foreground"}`}>
                     {fmt(remaining)}
                   </div>
                 </div>

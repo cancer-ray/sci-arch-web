@@ -2,39 +2,33 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FileText, Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { FileText, Download, Loader2, CloudOff } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
+import { mdComponents } from "@/lib/markdown";
+import { Button } from "@/components/ui/button";
 
-const mdComponents = {
-  h1: (props) => <h1 className="mt-2 font-serif text-2xl text-foreground" {...props} />,
-  h2: (props) => (
-    <h2 className="mt-6 border-b border-border pb-1 font-serif text-lg text-foreground" {...props} />
-  ),
-  h3: (props) => <h3 className="mt-5 font-serif text-base text-foreground" {...props} />,
-  p: (props) => <p className="mt-3 text-sm leading-relaxed text-foreground/85" {...props} />,
-  li: (props) => <li className="ml-5 mt-1 list-disc text-sm text-foreground/85" {...props} />,
-  strong: (props) => <strong className="font-medium text-foreground" {...props} />,
-  table: (props) => <table className="my-4 w-full border-collapse font-mono text-[11px]" {...props} />,
-  th: (props) => <th className="border-b border-border px-2 py-1 text-left font-medium" {...props} />,
-  td: (props) => <td className="border-b border-border/50 px-2 py-1 text-foreground/85" {...props} />,
-};
+const BACKEND_DOWN_MSG = "sci-arch+ backend isn't available yet — you're on the list.";
+
+function BackendInterstitial() {
+  return (
+    <div className="flex flex-col items-start gap-3 py-8">
+      <CloudOff className="h-5 w-5 text-muted-foreground" strokeWidth={1.4} />
+      <div className="eyebrow">sci-arch+</div>
+      <h2 className="font-serif text-xl text-foreground">Backend isn&apos;t available yet.</h2>
+      <p className="max-w-md text-sm text-muted-foreground">
+        The sci-arch+ backend isn&apos;t available yet — you&apos;re on the list. The validation
+        report and SOPs will appear here the moment it comes online.
+      </p>
+    </div>
+  );
+}
 
 function download(filename, text) {
   const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function saveBlob(filename, blob) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -52,8 +46,8 @@ export default function Compliance() {
   const [selectedId, setSelectedId] = useState(null);
   const [markdown, setMarkdown] = useState("");
   const [docLoading, setDocLoading] = useState(true);
-  const [exporting, setExporting] = useState(null);
-  const [exportError, setExportError] = useState("");
+  const [exporting, setExporting] = useState(false);
+  const [backendDown, setBackendDown] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate("/", { replace: true });
@@ -61,52 +55,48 @@ export default function Compliance() {
 
   useEffect(() => {
     if (!user) return;
-    api.get("/compliance").then(({ data }) => {
-      setDocs(data.docs);
-      if (data.docs.length) setSelectedId(data.docs[0].id);
-    });
+    api
+      .get("/compliance")
+      .then(({ data }) => {
+        setBackendDown(false);
+        setDocs(data.docs);
+        if (data.docs.length) setSelectedId(data.docs[0].id);
+        else setDocLoading(false);
+      })
+      .catch(() => {
+        setBackendDown(true);
+        setDocLoading(false);
+      });
   }, [user]);
 
   useEffect(() => {
     if (!selectedId) return;
     setDocLoading(true);
-    api.get(`/compliance/${encodeURIComponent(selectedId)}`).then(({ data }) => {
-      setMarkdown(data.markdown);
-      setDocLoading(false);
-    });
+    api
+      .get(`/compliance/${encodeURIComponent(selectedId)}`)
+      .then(({ data }) => {
+        setMarkdown(data.markdown);
+        setDocLoading(false);
+      })
+      .catch(() => {
+        setBackendDown(true);
+        setDocLoading(false);
+      });
   }, [selectedId]);
 
   const downloadCurrent = useCallback(() => {
     if (selectedId && markdown) download(`${selectedId}.md`, markdown);
   }, [selectedId, markdown]);
 
-  const exportAll = useCallback(async (format) => {
-    setExporting(format);
-    setExportError("");
+  const downloadAll = useCallback(async () => {
+    setExporting(true);
     try {
-      const binary = format === "pdf" || format === "zip";
-      const { data } = await api.get(
-        `/compliance/export?format=${format}`,
-        binary ? { responseType: "blob" } : {}
-      );
-      const mime =
-        format === "pdf"
-          ? "application/pdf"
-          : format === "zip"
-          ? "application/zip"
-          : format === "html"
-          ? "text/html;charset=utf-8"
-          : "text/markdown;charset=utf-8";
-      const blob = binary ? data : new Blob([data], { type: mime });
-      saveBlob(`sci-arch-compliance.${format}`, blob);
-    } catch (err) {
-      if (format === "pdf" && err?.response?.status === 501) {
-        setExportError("PDF export is not enabled on this server yet. Use .md or .zip.");
-      } else {
-        setExportError("Export failed. Please try again.");
-      }
+      const { data } = await api.get("/compliance/export");
+      download("sci-arch-compliance.md", data);
+    } catch {
+      toast.error(BACKEND_DOWN_MSG);
     } finally {
-      setExporting(null);
+      setExporting(false);
     }
   }, []);
 
@@ -121,12 +111,10 @@ export default function Compliance() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <main className="mx-auto max-w-6xl px-6 py-16">
+      <main className="mx-auto max-w-6xl px-6 py-14 sm:py-16">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-border pb-6">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-              § compliance &amp; validation
-            </div>
+            <div className="eyebrow">§ compliance &amp; validation</div>
             <h1 className="mt-3 font-serif text-3xl leading-tight text-foreground sm:text-4xl">
               Validation report &amp; SOPs.
             </h1>
@@ -136,40 +124,23 @@ export default function Compliance() {
               procedures behind it.
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1.5">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                export package
-              </span>
-              {["md", "pdf", "zip"].map((fmt) => (
-                <button
-                  key={fmt}
-                  onClick={() => exportAll(fmt)}
-                  disabled={!!exporting}
-                  className="btn-lift inline-flex h-9 items-center gap-1.5 border border-border px-3 text-sm text-foreground hover:bg-foreground hover:text-background disabled:opacity-50 transition-colors"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  {exporting === fmt ? "…" : `.${fmt}`}
-                </button>
-              ))}
-            </div>
-            {exportError && <p className="text-[11px] text-red-600">{exportError}</p>}
-          </div>
+          <Button variant="outline" onClick={downloadAll} disabled={exporting || backendDown}>
+            <Download className="h-3.5 w-3.5" />
+            {exporting ? "Exporting…" : "Download all (.md)"}
+          </Button>
         </div>
 
         <div className="grid grid-cols-12 gap-6">
           <nav className="col-span-12 sm:col-span-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              documents
-            </div>
+            <div className="eyebrow">documents</div>
             <ul className="mt-3 space-y-1">
               {docs.map((d) => (
                 <li key={d.id}>
                   <button
                     onClick={() => setSelectedId(d.id)}
-                    className={`flex w-full items-center gap-1.5 truncate px-2 py-1.5 text-left text-xs transition-colors ${
+                    className={`flex w-full items-center gap-1.5 truncate rounded-[2px] px-2 py-1.5 text-left text-xs transition-colors ${
                       d.id === selectedId
-                        ? "bg-foreground text-background"
+                        ? "bg-primary/10 text-primary"
                         : "text-foreground/75 hover:bg-secondary"
                     }`}
                   >
@@ -183,20 +154,18 @@ export default function Compliance() {
 
           <div className="col-span-12 sm:col-span-9">
             <div className="mb-3 flex justify-end">
-              <button
-                onClick={downloadCurrent}
-                disabled={docLoading}
-                className="btn-lift inline-flex items-center gap-1 border border-border px-2 py-1 text-xs text-foreground hover:bg-foreground hover:text-background disabled:opacity-50 transition-colors"
-              >
+              <Button variant="outline" size="sm" onClick={downloadCurrent} disabled={docLoading || backendDown}>
                 <Download className="h-3 w-3" /> download .md
-              </button>
+              </Button>
             </div>
-            <div className="border border-border p-8">
-              {docLoading ? (
+            <div className="rounded-[2px] border border-border p-6 sm:p-8">
+              {backendDown ? (
+                <BackendInterstitial />
+              ) : docLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
               ) : (
                 <article className="prose-eln">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents({})}>
                     {markdown}
                   </ReactMarkdown>
                 </article>

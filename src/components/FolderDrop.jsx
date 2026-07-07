@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-import { FolderOpen, UploadCloud, FileText } from "lucide-react";
+import { FolderOpen, HardDrive, FileText } from "lucide-react";
 import { readFolder, rememberNotebook, filesFromDrop, DEFAULT_STRUCTURE } from "@/lib/folder";
 import { LANDING, WORKSPACE } from "@/constants/testIds";
 
@@ -109,9 +109,9 @@ export function FolderDrop({ onLoaded, testid, variant = "primary" }) {
           dragging ? "bg-secondary/50 border-primary" : ""
         }`}
       >
-        <UploadCloud className="mx-auto h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
+        <HardDrive className="mx-auto h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
         <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
-          Drop .md files or a folder. Nothing leaves your machine.
+          Drop .md files or a folder. They open on this device — nothing is sent anywhere.
         </p>
         <div className="mt-2 flex items-center justify-center gap-1.5">
           <button
@@ -151,7 +151,7 @@ export function FolderDrop({ onLoaded, testid, variant = "primary" }) {
     >
       <div className="flex items-start gap-4">
         <div className="grid h-10 w-10 flex-none place-items-center border border-border text-foreground">
-          <UploadCloud className="h-4 w-4" strokeWidth={1.5} />
+          <HardDrive className="h-4 w-4" strokeWidth={1.5} />
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-serif text-lg text-foreground">
@@ -159,7 +159,7 @@ export function FolderDrop({ onLoaded, testid, variant = "primary" }) {
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             Pick individual <span className="font-mono">.md</span> files, or drag &amp; drop a
-            folder. Images are auto-linked. Everything stays on your machine.
+            folder. Images are auto-linked. Files open on your device — nothing is uploaded.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <button

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
@@ -60,7 +61,7 @@ function AppRouter() {
 }
 
 function AppShell() {
-  const { lightweight } = useTheme();
+  const { lightweight, theme } = useTheme();
   return (
     <MotionConfig reducedMotion={lightweight ? "always" : "user"}>
       <BrowserRouter>
@@ -68,6 +69,7 @@ function AppShell() {
         <AppRouter />
         <Toaster
           position="bottom-right"
+          theme={theme}
           toastOptions={{
             style: {
               borderRadius: 2,
@@ -75,6 +77,7 @@ function AppShell() {
             },
           }}
         />
+        <Analytics />
       </BrowserRouter>
     </MotionConfig>
   );

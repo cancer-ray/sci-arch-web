@@ -68,7 +68,7 @@ export function PlateMarker() {
             setFormat(e.target.value);
             setActiveWell(null);
           }}
-          className="h-7 border border-border bg-transparent px-1.5 font-mono text-[10px] uppercase focus:outline-none"
+          className="h-7 rounded-[2px] border border-border bg-transparent px-1.5 font-mono text-[10px] uppercase hover:bg-secondary transition-colors"
         >
           {Object.keys(FORMATS).map((f) => (
             <option key={f} value={f}>
@@ -76,8 +76,11 @@ export function PlateMarker() {
             </option>
           ))}
         </select>
-        <span className="font-mono text-[9px] text-muted-foreground">{labeledCount} labeled</span>
-        <button onClick={clearPlate} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">
+        <span className="font-mono text-[10px] text-muted-foreground">{labeledCount} labeled</span>
+        <button
+          onClick={clearPlate}
+          className="rounded-[2px] px-1 font-mono text-[10px] text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+        >
           clear
         </button>
       </div>
@@ -106,9 +109,9 @@ export function PlateMarker() {
                     onClick={() => openWell(id)}
                     className={`h-[16px] w-[16px] rounded-full border transition-colors ${
                       has
-                        ? "border-foreground bg-foreground"
+                        ? "border-primary bg-primary"
                         : "border-border hover:bg-secondary"
-                    } ${activeWell === id ? "ring-1 ring-primary" : ""}`}
+                    } ${activeWell === id ? "ring-1 ring-ring ring-offset-1 ring-offset-background" : ""}`}
                   />
                 );
               })}
@@ -126,11 +129,11 @@ export function PlateMarker() {
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && commit()}
             placeholder="sample label"
-            className="h-7 flex-1 border border-border bg-transparent px-1.5 font-mono text-xs focus:outline-none"
+            className="h-7 flex-1 rounded-[2px] border border-border bg-transparent px-1.5 font-mono text-xs"
           />
           <button
             onClick={commit}
-            className="h-7 border border-border px-2 text-[10px] text-foreground hover:bg-foreground hover:text-background transition-colors"
+            className="h-7 rounded-[2px] border border-border px-2 font-mono text-[10px] uppercase text-foreground hover:bg-secondary transition-colors"
           >
             set
           </button>

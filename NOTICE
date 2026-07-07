@@ -1,0 +1,16 @@
+sci-arch — freeLN client
+Copyright 2026 Ryan Lee (sci-arch.ca)
+
+This product is licensed under the Apache License, Version 2.0 (the "License");
+you may not use these files except in compliance with the License. A copy of the
+License is in the LICENSE file in this directory, and at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+"freeLN", "sci-arch", and "sci-arch+", and the sci-arch logo are trademarks of
+Ryan Lee / sci-arch. The Apache License does not grant permission to use these
+names or marks (see LICENSE, Section 6). See the "Trademarks" section of the
+README for the brand-use policy.
+
+This license covers the freeLN client (this `frontend/` application) only. The
+sci-arch+ backend is proprietary and is not distributed under this License.

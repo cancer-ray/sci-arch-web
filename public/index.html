@@ -5,24 +5,44 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#FAF9F6" />
         <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg" />
-        <meta name="description" content="Make your lab's AI work defensible. sci-arch keeps every action, human or AI, signed, versioned, and audit-ready (21 CFR Part 11-aligned). Free notebook that runs in your browser." />
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <meta name="description" content="sci-arch — a Part 11-aligned electronic lab notebook for markdown-native scientists. Own your data. Free for students." />
         <link rel="canonical" href="https://sci-arch.ca/" />
 
-        <!-- Open Graph -->
+        <!-- Open Graph / social link previews -->
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="sci-arch" />
-        <meta property="og:title" content="sci-arch: audit-ready electronic lab notebook for AI-era labs" />
-        <meta property="og:description" content="Every action, human or AI, lands signed, versioned, and audit-ready (21 CFR Part 11-aligned). AI drafts; a human signs. Bring your own Claude, no AI markup." />
+        <meta property="og:title" content="sci-arch — a lab notebook that holds up" />
+        <meta property="og:description" content="Local-first, Part 11-aligned electronic lab notebook. Free with freeLN — write, import, and export markdown; nothing leaves your device. Bring your own AI." />
         <meta property="og:url" content="https://sci-arch.ca/" />
         <meta property="og:image" content="https://sci-arch.ca/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        <!-- Twitter -->
+        <!-- Twitter card -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="sci-arch: audit-ready electronic lab notebook for AI-era labs" />
-        <meta name="twitter:description" content="Every action, human or AI, lands signed, versioned, and audit-ready (21 CFR Part 11-aligned). AI drafts; a human signs." />
+        <meta name="twitter:title" content="sci-arch — a lab notebook that holds up" />
+        <meta name="twitter:description" content="Local-first, Part 11-aligned electronic lab notebook. Free with freeLN. Own your data; bring your own AI." />
         <meta name="twitter:image" content="https://sci-arch.ca/og-image.png" />
+
+        <!-- Structured data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "sci-arch",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "AI-native, Part 11-aligned electronic lab notebook. freeLN is a free, local-first markdown notebook; sci-arch+ adds synced, audit-ready, e-signable records.",
+          "url": "https://sci-arch.ca/",
+          "offers": [
+            { "@type": "Offer", "name": "freeLN", "price": "0", "priceCurrency": "CAD" },
+            { "@type": "Offer", "name": "soloLN", "price": "15", "priceCurrency": "CAD" },
+            { "@type": "Offer", "name": "groupLN", "price": "49", "priceCurrency": "CAD" }
+          ]
+        }
+        </script>
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -39,35 +59,7 @@
         work correctly both with client-side routing and a non-root public URL.
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
-        <title>sci-arch: audit-ready electronic lab notebook (ELN)</title>
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "SoftwareApplication",
-              "name": "sci-arch",
-              "applicationCategory": "BusinessApplication",
-              "operatingSystem": "Web",
-              "url": "https://sci-arch.ca/",
-              "description": "An audit-ready electronic lab notebook that makes AI-assisted lab work defensible: every action, human or AI, is signed, versioned, human-attributable, and 21 CFR Part 11-aligned.",
-              "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "CAD",
-                "description": "freeLN: free browser-based notebook, nothing uploaded."
-              }
-            },
-            {
-              "@type": "Organization",
-              "name": "sci-arch",
-              "url": "https://sci-arch.ca/",
-              "logo": "https://sci-arch.ca/favicon.svg",
-              "founder": { "@type": "Person", "name": "Ryan Lee" }
-            }
-          ]
-        }
-        </script>
+        <title>sci-arch — electronic lab notebook</title>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>

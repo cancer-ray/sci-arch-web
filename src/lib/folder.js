@@ -72,8 +72,9 @@ export async function readFolder(fileList) {
         text,
         dir,
         editable: true,
-        history: [{ label: "imported entry" }],
+        history: [{ label: "imported entry", at: Date.now() }],
         edited: false,
+        dirty: false,
       });
     } else if (IMAGE_EXT.includes(ext)) {
       const url = URL.createObjectURL(f);
@@ -188,6 +189,157 @@ export const DEFAULT_STRUCTURE = [
   "README.md",
   ".sciarch/manifest.json",
 ];
+
+/**
+ * Note templates for the "new entry" flow. Bodies are plain GFM markdown.
+ * Deliberately no Date.now() at module scope — "Date:" lines stay blank and
+ * are for the scientist to fill in (or for callers to stamp at creation time).
+ */
+export const TEMPLATES = [
+  {
+    id: "blank",
+    label: "Blank",
+    filename: "Untitled.md",
+    body: "# Untitled\n\n",
+  },
+  {
+    id: "experiment",
+    label: "Experiment",
+    filename: "Experiment.md",
+    body: [
+      "# Experiment",
+      "",
+      "Date: ",
+      "Author: ",
+      "",
+      "## Objective",
+      "",
+      "What question is this experiment answering?",
+      "",
+      "## Materials",
+      "",
+      "- ",
+      "",
+      "## Procedure",
+      "",
+      "1. ",
+      "2. ",
+      "3. ",
+      "",
+      "## Results",
+      "",
+      "| Sample | Condition | Measurement | Notes |",
+      "| --- | --- | --- | --- |",
+      "|  |  |  |  |",
+      "",
+      "## Conclusion",
+      "",
+      "",
+    ].join("\n"),
+  },
+  {
+    id: "protocol",
+    label: "Protocol",
+    filename: "Protocol.md",
+    body: [
+      "# Protocol",
+      "",
+      "Date: ",
+      "Version: 1.0",
+      "",
+      "## Purpose",
+      "",
+      "",
+      "## Materials",
+      "",
+      "- ",
+      "",
+      "## Steps",
+      "",
+      "1. ",
+      "2. ",
+      "3. ",
+      "",
+    ].join("\n"),
+  },
+  {
+    id: "reagent-log",
+    label: "Reagent log",
+    filename: "Reagent log.md",
+    body: [
+      "# Reagent log",
+      "",
+      "Date: ",
+      "",
+      "| Reagent | Lot # | Vendor | Received | Opened | Expires | Location |",
+      "| --- | --- | --- | --- | --- | --- | --- |",
+      "|  |  |  |  |  |  |  |",
+      "",
+    ].join("\n"),
+  },
+  {
+    id: "daily-notes",
+    label: "Daily notes",
+    filename: "Daily notes.md",
+    body: [
+      "# Daily notes",
+      "",
+      "Date: ",
+      "",
+      "## Today",
+      "",
+      "- ",
+      "",
+      "## Follow-ups",
+      "",
+      "- ",
+      "",
+    ].join("\n"),
+  },
+];
+
+/**
+ * Build an in-memory demo notebook so first-time users can explore the app
+ * without picking a folder. Notes are synthesized from TEMPLATES plus a README
+ * describing the DEFAULT_STRUCTURE. Timestamps are stamped at call time (never
+ * at module scope).
+ * @returns {{rootName: string, markdown: Array<object>, images: object, origin: string}}
+ */
+export function sampleWorkspace() {
+  const rootName = "Sample notebook";
+  const at = Date.now();
+  const makeNote = (name, text) => ({
+    path: `${rootName}/${name}`,
+    name,
+    text,
+    dir: "",
+    editable: true,
+    history: [{ label: "created entry", at }],
+    edited: false,
+    dirty: false,
+  });
+
+  const readme = [
+    "# Sample notebook",
+    "",
+    "Welcome! This is an in-memory demo notebook — nothing here touches your disk.",
+    "Edit any entry, add new ones from templates, and export a `.zip` when ready.",
+    "",
+    "A typical sci-arch notebook folder looks like:",
+    "",
+    ...DEFAULT_STRUCTURE.map((entry) => `- \`${entry}\``),
+    "",
+  ].join("\n");
+
+  const byId = (id) => TEMPLATES.find((t) => t.id === id);
+  const notes = [makeNote("README.md", readme)];
+  for (const id of ["experiment", "protocol", "reagent-log", "daily-notes"]) {
+    const t = byId(id);
+    if (t) notes.push(makeNote(t.filename, t.body));
+  }
+
+  return { rootName, markdown: notes, images: {}, origin: "created" };
+}
 
 /**
  * Persist / retrieve most-recent notebook name in localStorage so the landing

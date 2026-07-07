@@ -30,3 +30,35 @@ export async function getAccessToken() {
   const { data } = await supabase.auth.getSession();
   return data.session?.access_token ?? null;
 }
+
+// True only when real Supabase env is configured (not the placeholder fallback).
+export const supabaseConfigured = Boolean(url && anonKey);
+
+/**
+ * Capture a lead/waitlist signup into the public `leads` table (anon INSERT,
+ * RLS write-only). Returns { ok }. Safe: resolves { ok:false } if Supabase
+ * isn't configured or the insert fails, so callers fall back to mailto/clipboard
+ * and no lead-flow ever throws. Activates once REACT_APP_SUPABASE_ANON_KEY is set
+ * and the leads migration (backend/migrations/0003_leads.sql) is applied.
+ */
+export async function captureLead(payload) {
+  if (!supabaseConfigured) return { ok: false, reason: "not-configured" };
+  try {
+    const { error } = await supabase.from("leads").insert([
+      {
+        email: payload.email || null,
+        name: payload.name || null,
+        organization: payload.organization || null,
+        seats: payload.seats ?? null,
+        message: payload.message || null,
+        tier: payload.tier || null,
+        kind: payload.kind || "waitlist",
+        source: payload.source || (typeof window !== "undefined" ? window.location.pathname : null),
+      },
+    ]);
+    if (error) return { ok: false, reason: error.message };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, reason: String(e) };
+  }
+}
