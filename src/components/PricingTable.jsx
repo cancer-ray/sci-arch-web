@@ -174,7 +174,7 @@ export function PricingTable({ compact = false }) {
           className="border-r-0 md:border-r border-b md:border-b-0"
         >
           <div className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            for founders &amp; individual scientists
+            for a scientist working solo
           </div>
           <div className="mt-2">
             <PlusBadge size="sm" />

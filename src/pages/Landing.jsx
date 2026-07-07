@@ -86,7 +86,7 @@ const studentFeatures = [
 const faqs = [
   {
     q: "What's the difference between freeLN and sci-arch+?",
-    a: "freeLN is live today: fully local, nothing is ever uploaded, free forever. sci-arch+ is the cloud product, coming soon: soloLN (for founders and individuals) and groupLN (shared notebooks, e-signatures, full audit trail, from a small lab to a large enterprise). Join the waitlist on the pricing section above for early access.",
+    a: "freeLN is live today: fully local, nothing is ever uploaded, free forever. sci-arch+ is the cloud product, coming soon: soloLN (a solo scientist's synced, audit-ready notebook) and groupLN (for small labs and teams: shared notebooks, e-signatures, and a full audit trail). Join the waitlist on the pricing section above for early access.",
   },
   {
     q: "Where is my data stored?",
@@ -170,8 +170,8 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Seo
-        title="sci-arch — a lab notebook that holds up"
-        description="Local-first, Part 11-aligned electronic lab notebook. Free with freeLN — write, import, and export markdown; nothing leaves your device. Bring your own AI."
+        title="sci-arch: make your lab's AI work defensible"
+        description="An electronic lab notebook that makes AI-assisted work defensible: every action, human or AI, lands signed, versioned, and audit-ready. Part 11-aligned. freeLN is free and runs in your browser."
         event="landing_view"
       />
       <Nav />
@@ -198,9 +198,9 @@ export default function LandingPage() {
               transition={{ delay: 0.05, duration: 0.6 }}
               className="mt-4 font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
             >
-              A notebook for
+              Make your lab's AI work
               <br className="hidden sm:block" />
-              <span className="italic text-foreground/85"> real scientists.</span>
+              <span className="italic text-foreground/85"> defensible.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
