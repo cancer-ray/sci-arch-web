@@ -5,7 +5,7 @@ import { FreeLnBadge } from "@/components/FreeLnBadge";
 import { SoloLnBadge } from "@/components/SoloLnBadge";
 import { GroupLnBadge } from "@/components/GroupLnBadge";
 import { PlusBadge } from "@/components/PlusBadge";
-import { KofiButton } from "@/components/KofiButton";
+import { StripeBuyButton } from "@/components/StripeBuyButton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -292,7 +292,7 @@ localStorage.setItem(draftKey, text); // saved on your device
               freeLN is free, and it always will be. If it saved you time this semester, you can
               buy me a coffee.
             </p>
-            <KofiButton className="mx-auto mt-5 inline-flex h-10 items-center gap-2 rounded-[2px] bg-primary px-5 text-sm font-medium text-primary-foreground hover:opacity-95" />
+            <StripeBuyButton className="mx-auto mt-5" />
           </div>
         </div>
       </section>
