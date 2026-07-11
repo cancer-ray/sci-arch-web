@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
@@ -78,6 +79,7 @@ function AppShell() {
           }}
         />
         <Analytics />
+        <SpeedInsights />
       </BrowserRouter>
     </MotionConfig>
   );
