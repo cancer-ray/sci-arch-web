@@ -287,6 +287,23 @@
     border-radius: 2px;
 }
 
+/* Hold hint — the small hint card revealed by hover / long-press on
+   icon-only toolbar buttons (components/ui/hold-hint.jsx). Opacity-only
+   fade so it never fights the inline transform used for viewport
+   clamping. */
+.hold-hint-card {
+    animation: hold-hint-in 120ms ease-out;
+}
+@keyframes hold-hint-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hold-hint-card {
+        animation: none;
+    }
+}
+
 /* ─────────────────────────────────────────────
    .prose-eln — editorial typography for rendered markdown
    (element selectors: react-markdown output has no utility classes)

@@ -2,9 +2,6 @@ import { useState } from "react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { FreeLnBadge } from "@/components/FreeLnBadge";
-import { SoloLnBadge } from "@/components/SoloLnBadge";
-import { GroupLnBadge } from "@/components/GroupLnBadge";
-import { PlusBadge } from "@/components/PlusBadge";
 import { StripeBuyButton } from "@/components/StripeBuyButton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
@@ -16,18 +13,15 @@ const REPO_URL = "https://github.com/cancer-ray/sci-arch-web";
 const lineup = [
   {
     badge: <FreeLnBadge size="lg" />,
-    plus: false,
-    body: "Free, local, for anyone writing up their own work. No account, nothing uploaded.",
+    body: "Free, local, for anyone writing up their own work. No account, nothing uploaded. This is the whole product, and it stays free.",
   },
   {
-    badge: <SoloLnBadge size="lg" />,
-    plus: true,
-    body: "For founders and individual scientists: a cloud notebook of your own. Launching next week.",
+    badge: <span className="font-serif text-xl text-foreground">Buy me lunch</span>,
+    body: "Name your own price, $15 CAD minimum, monthly. A small thank-you if freeLN saved you time, with no tier gates behind it.",
   },
   {
-    badge: <GroupLnBadge size="lg" />,
-    plus: true,
-    body: "What I built at scrybio.ai. Shared notebooks, e-signatures, a full audit trail. Scales from a two-person lab to an enterprise. Launching in August.",
+    badge: <span className="font-serif text-xl text-foreground">Support my dev work</span>,
+    body: "$50 CAD per seat each month. A steadier way for a lab or team to back the work and buy me more days to keep shipping.",
   },
 ];
 
@@ -92,7 +86,7 @@ export default function About() {
               putting AI to work in their data. It's free, and it always will be."
             </p>
             <footer className="mt-4 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
-              Ryan Lee · CEO &amp; founder
+              Ryan Lee · solo developer
             </footer>
           </blockquote>
         </div>
@@ -112,12 +106,12 @@ export default function About() {
             </p>
           </div>
           <div className="max-w-[65ch]">
-            <h2 className="font-serif text-xl text-foreground">Why groupLN exists</h2>
+            <h2 className="font-serif text-xl text-foreground">Why I built the audit layer</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               At scrybio.ai, our AI pipeline started writing a lot of our documentation. I went
-              looking for a lab notebook with real write rules for that: who wrote what, when,
-              reviewed by whom. Couldn't find one. So I built groupLN internally. Told a few other
-              founders about it. Every one of them had the same problem. So I shipped it.
+              looking for a lab notebook with real write rules for that, tracking who wrote what,
+              when, reviewed by whom. Couldn't find one, so I built the record layer myself. A few
+              other founders I told had the same problem, so I kept building it out.
             </p>
           </div>
           <div className="max-w-[65ch]">
@@ -215,11 +209,6 @@ localStorage.setItem(draftKey, text); // saved on your device
           <div className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-3">
             {lineup.map((l, i) => (
               <div key={i} className="bg-card p-5 sm:p-6">
-                {l.plus && (
-                  <div className="mb-1.5">
-                    <PlusBadge size="sm" />
-                  </div>
-                )}
                 {l.badge}
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{l.body}</p>
               </div>
@@ -290,7 +279,7 @@ localStorage.setItem(draftKey, text); // saved on your device
           <div className="flex flex-col justify-center rounded-[2px] border border-border bg-secondary/20 p-5 text-center sm:p-6">
             <p className="text-sm leading-relaxed text-muted-foreground">
               freeLN is free, and it always will be. If it saved you time this semester, you can
-              buy me a coffee.
+              buy me lunch.
             </p>
             <StripeBuyButton className="mx-auto mt-5" />
           </div>

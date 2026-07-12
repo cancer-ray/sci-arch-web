@@ -9,7 +9,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DASHBOARD, NAV } from "@/constants/testIds";
 
-const planLabel = { free: "freeLN", academic: "soloLN", enterprise: "groupLN" };
+const planLabel = { free: "freeLN", academic: "lunch supporter", enterprise: "team supporter" };
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -91,18 +91,18 @@ export default function Dashboard() {
                 status · {subscriptionStatus}
               </span>
             </div>
-            <h2 className="mt-6 font-serif text-2xl">Subscription</h2>
+            <h2 className="mt-6 font-serif text-2xl">Support</h2>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
               {plan === "free"
-                ? "You're on freeLN. Upgrade to sci-arch+ for a cloud notebook, shared access, and a Part 11-aligned audit trail."
-                : `You're on the ${planLabel[plan]} plan with ${seats} seat${seats > 1 ? "s" : ""} prepaid.`}
+                ? "You're on freeLN, and it stays free forever. If it helps your work, you can chip in to support development."
+                : `You're supporting freeLN as a ${planLabel[plan]} with ${seats} seat${seats > 1 ? "s" : ""}. Thank you.`}
             </p>
             {backendDown && (
               <p className="mt-4 flex max-w-md items-start gap-2 rounded-[2px] border border-border bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
                 <CloudOff className="mt-0.5 h-3.5 w-3.5 flex-none" strokeWidth={1.5} />
                 <span>
-                  sci-arch+ backend isn&apos;t available yet — you&apos;re on the list. Live
-                  subscription details will appear here once it&apos;s online.
+                  The server that tracks support details isn&apos;t reachable right now. freeLN
+                  keeps working regardless — everything lives on your device.
                 </span>
               </p>
             )}
@@ -112,7 +112,7 @@ export default function Dashboard() {
                 data-testid={plan === "free" ? DASHBOARD.upgradeBtn : DASHBOARD.managePlanBtn}
                 className={cn(buttonVariants({ variant: "primary", size: "md" }))}
               >
-                {plan === "free" ? "Upgrade plan" : "Manage plan"}
+                {plan === "free" ? "Chip in" : "Manage support"}
                 <ExternalLink className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -130,7 +130,7 @@ export default function Dashboard() {
             </div>
             <div>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">02</span>
-              <p className="mt-1 text-sm text-foreground/80">Invite lab members and prepay seats when you&apos;re ready.</p>
+              <p className="mt-1 text-sm text-foreground/80">Invite lab members, and add support seats if your group wants to chip in.</p>
             </div>
             <div>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">03</span>

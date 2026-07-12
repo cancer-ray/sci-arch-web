@@ -2,18 +2,18 @@
 
 > Make your lab's AI work defensible. sci-arch is an AI-native electronic lab notebook (ELN) where every action, whether a human or an AI made it, lands signed, versioned, and audit-ready. The AI drafts; only a human signs and locks. Bring your own Claude through an MCP connector, so there is no AI markup and you own the model.
 
-sci-arch is built for labs that use AI and still need records they can defend. Paste in raw AI output and you get no author, no timestamp, and no history, which is exactly the record an auditor or reviewer will not trust. sci-arch captures every action as a signed, content-addressed version with a tamper-evident, append-only audit trail, aligned to 21 CFR Part 11 and EU Annex 11. freeLN, the free tier, runs entirely in your browser and keeps everything on your device. The paid cloud tiers (soloLN, groupLN) add synced, versioned, e-signable records and team features. Best for small and early-stage biotech, CROs, and audit-prep labs; also free for individual scientists and students.
+sci-arch is built for labs that use AI and still need records they can defend. Paste in raw AI output and you get no author, no timestamp, and no history, which is exactly the record an auditor or reviewer will not trust. sci-arch captures every action as a signed, content-addressed version with a tamper-evident, append-only audit trail, aligned to 21 CFR Part 11 and EU Annex 11. freeLN, the free notebook, runs entirely in your browser and keeps everything on your device. It is built by a solo developer for the scientific community, free forever with no account. If it helps, you can support the work through Stripe (buy me lunch, or back the dev work per seat); support is optional and gates no features.
 
 Honesty note: records are "Part 11-aligned," never "certified." Compliance is a property of a validated system plus the customer's own quality processes; sci-arch provides the controls and validation package, and the customer qualifies it for their intended use.
 
 ## Product
 - [freeLN workspace](https://sci-arch.ca/workspace): Free, local-first markdown lab notebook. Write new entries or import from Word, PDF, Notion, or another ELN export, full-text search, PDF export. Nothing is uploaded; files stay on your device. No account.
-- [Pricing](https://sci-arch.ca/pricing): freeLN (free, always), soloLN (individual cloud notebook, about $15 CAD per month), groupLN (team / GLP-compliance layer, about $49 CAD per seat per month). soloLN and groupLN are early access.
+- [Pricing](https://sci-arch.ca/pricing): freeLN (free, always, no account, local-first). Two optional ways to support the solo developer: "buy me lunch" (pay-what-you-want monthly support, minimum $15 CAD) and "support my dev work" ($50 CAD per seat per month). Both run through Stripe; neither gates any freeLN feature.
 - [Work with Claude](https://sci-arch.ca/connect): Connect your own Claude via the sci-arch MCP connector. Every AI action is attributed, versioned, and recorded in the tamper-evident audit trail; only a human signs and locks.
 
 ## Company
 - [About](https://sci-arch.ca/about): Solo-founded and bootstrapped by a wet-lab scientist. Data ownership first; human-accountable AI.
-- [Contact](https://sci-arch.ca/contact): Get in touch or join the early-access waitlist.
+- [Contact](https://sci-arch.ca/contact): Get in touch with the solo developer, or ask about supporting a whole team.
 
 ## Legal
 - [Privacy policy](https://sci-arch.ca/privacy): What is collected, subprocessors, cross-border transfer, and your rights. The free tier keeps everything on your machine.

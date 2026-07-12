@@ -22,13 +22,14 @@ You must provide accurate information when creating an account and are responsib
 activity under it. You must be legally able to enter into a contract. If you're signing up on
 behalf of an organization, you're representing that you have authority to bind it.
 
-## Subscriptions and billing
+## Optional support and billing
 
-sci-arch+ plans are billed per seat, monthly or annually, in CAD, through Stripe. New
-subscriptions may include a free trial that requires a payment method; if you don't cancel
-before the trial ends, billing begins automatically. You can cancel anytime through the
-customer portal; cancellation takes effect at the end of the current billing period. We don't
-offer prorated refunds for partial periods except where required by law.
+sci-arch is built by a solo developer and freeLN is free. If you choose to support the work,
+there are two monthly options billed in CAD through Stripe: "buy me lunch," a pay-what-you-want
+monthly contribution with a $15 CAD minimum, and "support my dev work" at $50 CAD per seat per
+month. Support is voluntary and does not unlock or gate any freeLN feature. You can cancel
+anytime through Stripe; cancellation takes effect at the end of the current billing period. We
+don't offer prorated refunds for partial periods except where required by law.
 
 ## Your content
 

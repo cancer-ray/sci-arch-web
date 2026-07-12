@@ -533,8 +533,8 @@ export function ElnHero() {
             <span className="hidden text-xs text-muted-foreground sm:inline">{scene.sub}</span>
             {scene.plus && (
               <Badge variant="soon" className="ml-auto flex-none self-center whitespace-nowrap">
-                <span className="hidden sm:inline">SCI-ARCH+ · IN DEVELOPMENT</span>
-                <span className="sm:hidden">SCI-ARCH+</span>
+                <span className="hidden sm:inline">freeLN · built solo</span>
+                <span className="sm:hidden">freeLN</span>
               </Badge>
             )}
           </motion.div>

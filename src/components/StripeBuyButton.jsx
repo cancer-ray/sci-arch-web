@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { STRIPE } from "@/lib/stripe";
 
 /**
  * Renders Stripe's hosted "Buy Button" web component. Stripe's buy-button.js
@@ -11,9 +12,6 @@ import { useEffect } from "react";
  * The button's colors, label, and size are configured in the Stripe dashboard,
  * not here — the `className` wrapper only positions the element on the page.
  */
-const BUY_BUTTON_ID = "buy_btn_1Ts9fhHoPZ7iTGGV3gz3tVJB";
-const PUBLISHABLE_KEY =
-  "pk_live_51ToxqlHoPZ7iTGGV007Zkf6EV0GGyy9VWPaPSdBSz47HHJ6PHXEIrnBYwNjDmbnXNNZRvxAbMbpkuyBnr3G7uLYR00BINWH9sX";
 const SCRIPT_SRC = "https://js.stripe.com/v3/buy-button.js";
 
 export function StripeBuyButton({ className = "" }) {
@@ -28,8 +26,8 @@ export function StripeBuyButton({ className = "" }) {
   return (
     <div className={className}>
       <stripe-buy-button
-        buy-button-id={BUY_BUTTON_ID}
-        publishable-key={PUBLISHABLE_KEY}
+        buy-button-id={STRIPE.buyButtonId}
+        publishable-key={STRIPE.publishableKey}
       />
     </div>
   );

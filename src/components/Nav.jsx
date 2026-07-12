@@ -8,7 +8,6 @@ import { SettingsMenu } from "@/components/SettingsMenu";
 import { Button } from "@/components/ui/button";
 import { LogoMark, Wordmark } from "@/components/Logo";
 import { FolderDrop } from "@/components/FolderDrop";
-import { ContactSalesDialog } from "@/components/ContactSalesDialog";
 import { ev } from "@/lib/analytics";
 import { NAV } from "@/constants/testIds";
 
@@ -17,7 +16,6 @@ export function Nav() {
   const { setWorkspace } = useWorkspace();
   const location = useLocation();
   const navigate = useNavigate();
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleFolder = (ws) => {
@@ -128,12 +126,11 @@ export function Nav() {
               variant="outline"
               size="sm"
               data-testid={NAV.signInBtn}
-              onClick={() => setWaitlistOpen(true)}
-              title="Sign-in is for sci-arch+, coming soon"
+              onClick={() => navigate("/pricing")}
+              title="freeLN is free — support the work if it helps"
               className="hidden sm:inline-flex"
             >
-              <span className="hidden lg:inline">Get early access</span>
-              <span className="lg:hidden">Early access</span>
+              Support
             </Button>
           )}
           <Button
@@ -212,18 +209,17 @@ export function Nav() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    setWaitlistOpen(true);
+                    navigate("/pricing");
                     setMenuOpen(false);
                   }}
                 >
-                  Get early access
+                  Support
                 </Button>
               )}
             </div>
           </nav>
         </div>
       )}
-      <ContactSalesDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} variant="waitlist" defaultSeats={1} />
     </header>
   );
 }

@@ -16,16 +16,16 @@ import { CONTACT } from "@/constants/testIds";
 
 const COPY = {
   enterprise: {
-    eyebrow: "§ enterprise inquiry",
-    title: "Talk to sales",
+    eyebrow: "§ team & custom",
+    title: "Support a whole team",
     description:
-      "Prepay for a term, volume discounts, custom SSO / audit configurations. We’ll reply within one business day.",
+      "If you're backing freeLN for a lab, or need something custom built, tell me a bit about it and I’ll reply personally, usually within a day.",
   },
   waitlist: {
-    eyebrow: "§ sci-arch+, coming soon",
-    title: "Get early access",
+    eyebrow: "§ keep in touch",
+    title: "Get notified",
     description:
-      "soloLN is launching next week; groupLN launches in August. Leave your email and I’ll reach out personally the moment it’s ready, plus early-access pricing.",
+      "Leave your email and I’ll let you know when there’s something new worth sharing. No list churn, just the occasional note from me.",
   },
 };
 
@@ -54,7 +54,7 @@ export function ContactSalesDialog({ open, onOpenChange, defaultSeats = 10, vari
     }
   }, [open, defaultSeats]);
 
-  const subject = isWaitlist ? "sci-arch+ early access" : "Enterprise inquiry";
+  const subject = isWaitlist ? "sci-arch — keep me posted" : "sci-arch — team / custom support";
   const body = [
     `Name: ${name}`,
     `Email: ${email}`,
@@ -115,11 +115,11 @@ export function ContactSalesDialog({ open, onOpenChange, defaultSeats = 10, vari
             data-testid={CONTACT.success}
             className="rounded-[2px] border border-border p-5 text-sm text-foreground/80 sm:p-6"
           >
-            <p className="font-serif text-lg text-foreground">You're on the list.</p>
+            <p className="font-serif text-lg text-foreground">Got it, thanks.</p>
             <p className="mt-2 text-muted-foreground">
-              Thanks{name ? `, ${name.split(" ")[0]}` : ""} — Ryan will reach out personally at{" "}
-              <span className="font-mono text-foreground">{email}</span> the moment{" "}
-              {isWaitlist ? "sci-arch+ is ready, with early-access pricing" : "he can help"}.
+              Thanks{name ? `, ${name.split(" ")[0]}` : ""} — I'll be in touch at{" "}
+              <span className="font-mono text-foreground">{email}</span>{" "}
+              {isWaitlist ? "when there's something new worth sharing" : "about your team, usually within a day"}.
             </p>
           </div>
         ) : done ? (
@@ -130,7 +130,7 @@ export function ContactSalesDialog({ open, onOpenChange, defaultSeats = 10, vari
             <p className="font-serif text-lg text-foreground">Your message is ready.</p>
             <p className="mt-2 text-muted-foreground">
               Email it to <span className="font-mono text-foreground">{CONTACT_EMAIL}</span> and
-              Ryan will get back to you at <span className="font-mono">{email}</span>.
+              I'll get back to you at <span className="font-mono">{email}</span>.
             </p>
             <pre className="mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap border border-border bg-secondary/30 p-3 font-mono text-xs leading-relaxed text-foreground/85">
               {body}
@@ -216,7 +216,7 @@ export function ContactSalesDialog({ open, onOpenChange, defaultSeats = 10, vari
             </div>
             <DialogFooter>
               <Button data-testid={CONTACT.submit} type="submit" className="w-full" disabled={submitting}>
-                {submitting ? "Sending…" : isWaitlist ? "Join the list" : "Prepare inquiry"}
+                {submitting ? "Sending…" : isWaitlist ? "Keep me posted" : "Send it my way"}
               </Button>
             </DialogFooter>
           </form>

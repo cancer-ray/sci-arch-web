@@ -13,6 +13,7 @@ import { Calculator } from "./Calculator";
 import { ReverseComplement } from "./ReverseComplement";
 import { PlateMarker } from "./PlateMarker";
 import { QuickTimer } from "./QuickTimer";
+import { HoldHint } from "@/components/ui/hold-hint";
 
 const TOOL_TYPES = {
   calculator: { label: "Calculator", icon: CalcIcon, Component: Calculator },
@@ -83,16 +84,17 @@ export function ToolDock() {
           Toolbox
         </div>
         <div className="relative">
-          <button
+          <HoldHint
+            icon={Plus}
+            label="Add tool"
+            description="Add a tool"
             onClick={() => setPickerOpen((o) => !o)}
-            aria-label="Add tool"
+            active={pickerOpen}
+            size="h-6 w-6"
             aria-expanded={pickerOpen}
-            className="inline-flex h-6 w-6 items-center justify-center rounded-[2px] border border-border text-foreground hover:bg-secondary transition-colors"
-          >
-            <Plus className="h-3 w-3" />
-          </button>
+          />
           {pickerOpen && (
-            <div className="printed-card absolute right-0 top-7 z-20 w-44 p-1 text-foreground">
+            <div className="printed-card absolute right-0 top-7 z-20 w-44 max-w-[calc(100vw-1rem)] p-1 text-foreground">
               {Object.entries(TOOL_TYPES).map(([type, def]) => {
                 const Icon = def.icon;
                 return (
@@ -128,23 +130,32 @@ export function ToolDock() {
                   <Icon className="h-3 w-3" /> {def.label}
                 </span>
                 <div className="flex items-center gap-0.5">
-                  <button
+                  <HoldHint
+                    icon={ChevronUp}
+                    label="Move up"
+                    description="Move up"
                     onClick={() => move(t.id, -1)}
                     disabled={i === 0}
-                    className="text-muted-foreground hover:text-foreground disabled:opacity-30"
-                  >
-                    <ChevronUp className="h-3 w-3" />
-                  </button>
-                  <button
+                    variant="ghost"
+                    size="h-6 w-6"
+                  />
+                  <HoldHint
+                    icon={ChevronDown}
+                    label="Move down"
+                    description="Move down"
                     onClick={() => move(t.id, 1)}
                     disabled={i === tools.length - 1}
-                    className="text-muted-foreground hover:text-foreground disabled:opacity-30"
-                  >
-                    <ChevronDown className="h-3 w-3" />
-                  </button>
-                  <button onClick={() => removeTool(t.id)} className="text-muted-foreground hover:text-foreground">
-                    <X className="h-3 w-3" />
-                  </button>
+                    variant="ghost"
+                    size="h-6 w-6"
+                  />
+                  <HoldHint
+                    icon={X}
+                    label="Remove"
+                    description="Remove"
+                    onClick={() => removeTool(t.id)}
+                    variant="ghost"
+                    size="h-6 w-6"
+                  />
                 </div>
               </div>
               <div className="p-2">

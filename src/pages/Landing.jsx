@@ -8,7 +8,6 @@ import {
   Search,
   ShieldCheck,
   Users,
-  Lock,
   Bot,
   UserX,
   Clock,
@@ -16,6 +15,7 @@ import {
   Copy,
   PenLine,
   Plug,
+  Heart,
 } from "lucide-react";
 import {
   Accordion,
@@ -67,30 +67,30 @@ const studentFeatures = [
   {
     id: LANDING.featureFree,
     label: "05",
-    title: "AI-capable",
-    body: "Bring your own model, back it up to the cloud, and manage your personal reagents.",
-    icon: Bot,
-    preview: "soloLN · coming soon",
+    title: "Buy me lunch",
+    body: "freeLN stays free forever. If it earns a place in your day, you can chip in what it's worth to you each month, starting at $15 CAD. Entirely optional, and it keeps me building.",
+    icon: Heart,
+    preview: "individual · pay what you want",
   },
   {
     id: LANDING.featureImages,
     label: "06",
-    title: "Built for teams",
-    body: "A GLP-compliance layer for labs ranging from 2 employees to enterprise: inventory management, shared seats, tracked commenting between users, and shared equipment booking.",
-    icon: Users,
-    preview: "groupLN · coming soon",
+    title: "Support my dev work",
+    body: "For a team that runs on freeLN, you can back the work at $50 CAD per seat each month. Same free notebook, plus a direct line to me and a say in what I build next.",
+    icon: Heart,
+    preview: "teams · $50 CAD/seat",
   },
 ];
 
 
 const faqs = [
   {
-    q: "What's the difference between freeLN and sci-arch+?",
-    a: "freeLN is live today: fully local, nothing is ever uploaded, free forever. sci-arch+ is the cloud product, coming soon: soloLN (a solo scientist's synced, audit-ready notebook) and groupLN (for small labs and teams: shared notebooks, e-signatures, and a full audit trail). Join the waitlist on the pricing section above for early access.",
+    q: "Do I have to pay for freeLN?",
+    a: "No. freeLN is the whole notebook and it stays free forever, fully local, with nothing ever uploaded. I build it solo, so if it helps your work you can chip in on the pricing section above. An individual can buy me lunch once a month (pay what you want, from $15 CAD), and a team can support my dev work at $50 CAD per seat each month. Both are optional and neither unlocks anything freeLN doesn't already have.",
   },
   {
     q: "Where is my data stored?",
-    a: "With freeLN, on your machine, nowhere else. It runs entirely in your browser, so I do not collect or read your data and nothing is uploaded to a server. With sci-arch+ (the cloud tier), your notebook lives in your own account on Supabase (Postgres plus encrypted storage) with per-lab access controls; see the privacy policy for the full data map.",
+    a: "On your machine, nowhere else. freeLN runs entirely in your browser, so I never collect or read your data and nothing is uploaded to a server. See the privacy policy for the full data map.",
   },
   {
     q: "Is Claude allowed for science?",
@@ -110,7 +110,7 @@ const faqs = [
   },
   {
     q: "Is sci-arch open source?",
-    a: "The client is open. The sync and audit backend is proprietary for the paid tier.",
+    a: "The client is open. The hosted sync and audit backend stays closed for now, though freeLN itself needs none of it to run.",
   },
 ];
 
@@ -257,7 +257,7 @@ export default function LandingPage() {
                 data-testid={LANDING.heroCtaSecondary}
                 onClick={() => navigate("/pricing")}
               >
-                Lab manager? Get early access →
+                Back the work →
               </Button>
             </motion.div>
             <motion.p
@@ -371,7 +371,7 @@ export default function LandingPage() {
                 </p>
                 {f.preview && (
                   <Badge variant="soon" className="mt-4 w-fit gap-1">
-                    <Lock className="h-2.5 w-2.5" /> {f.preview}
+                    <Heart className="h-2.5 w-2.5" /> {f.preview}
                   </Badge>
                 )}
               </div>
