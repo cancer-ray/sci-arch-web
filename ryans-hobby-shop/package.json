@@ -1,0 +1,17 @@
+{
+  "name": "ryans-hobby-shop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canadian-rail (Interac e-Transfer) storefront reference implementation — Ryan's Online Hobby Shop",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

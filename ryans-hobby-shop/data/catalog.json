@@ -1,0 +1,91 @@
+{
+  "shop": {
+    "name": "Ryan's Online Hobby Shop",
+    "tagline": "Magic singles from my personal collection + handmade goods. Pickup in Toronto, shipping across Canada.",
+    "city": "Toronto",
+    "currency": "CAD"
+  },
+  "products": [
+    {
+      "id": "mtg-2026-07-a-001",
+      "category": "magic",
+      "title": "Lightning Bolt",
+      "description": "One of the cleanest burn spells ever printed. From my personal binder.",
+      "priceCents": 800,
+      "currency": "CAD",
+      "quantity": 3,
+      "batch": "2026-07-A",
+      "images": ["/assets/card.svg"],
+      "card": { "set": "3rd Edition (Revised)", "condition": "LP", "foil": false, "rarity": "Common" }
+    },
+    {
+      "id": "mtg-2026-07-a-002",
+      "category": "magic",
+      "title": "Counterspell",
+      "description": "Blue's signature answer. Lightly played, no creases.",
+      "priceCents": 1200,
+      "currency": "CAD",
+      "quantity": 2,
+      "batch": "2026-07-A",
+      "images": ["/assets/card.svg"],
+      "card": { "set": "Ice Age", "condition": "NM", "foil": false, "rarity": "Common" }
+    },
+    {
+      "id": "mtg-2026-07-a-003",
+      "category": "magic",
+      "title": "Birds of Paradise",
+      "description": "Turn-one mana of any colour. A staple green one-drop.",
+      "priceCents": 2500,
+      "currency": "CAD",
+      "quantity": 1,
+      "batch": "2026-07-A",
+      "images": ["/assets/card.svg"],
+      "card": { "set": "7th Edition", "condition": "MP", "foil": false, "rarity": "Rare" }
+    },
+    {
+      "id": "mtg-2026-07-a-004",
+      "category": "magic",
+      "title": "Serra Angel (Foil)",
+      "description": "Classic 4/4 flyer with vigilance. Foil, pack-fresh.",
+      "priceCents": 3500,
+      "currency": "CAD",
+      "quantity": 1,
+      "batch": "2026-07-A",
+      "images": ["/assets/card.svg"],
+      "card": { "set": "8th Edition", "condition": "NM", "foil": true, "rarity": "Rare" }
+    },
+    {
+      "id": "handmade-mask-001",
+      "category": "handmade",
+      "title": "Hand-carved Wooden Mask",
+      "description": "Carved and finished by hand. Each one is a little different. Wall-hangable.",
+      "priceCents": 8500,
+      "currency": "CAD",
+      "quantity": 2,
+      "batch": "2026-07-A",
+      "images": ["/assets/mask.svg"]
+    },
+    {
+      "id": "handmade-scarf-001",
+      "category": "handmade",
+      "title": "Knit Wool Scarf",
+      "description": "Chunky knit, undyed wool. Warm enough for a Toronto February.",
+      "priceCents": 4500,
+      "currency": "CAD",
+      "quantity": 4,
+      "batch": "2026-07-A",
+      "images": ["/assets/clothing.svg"]
+    },
+    {
+      "id": "handmade-tee-001",
+      "category": "handmade",
+      "title": "Hand-printed Tee",
+      "description": "Original block print on organic cotton. Unisex, sizes M/L.",
+      "priceCents": 3000,
+      "currency": "CAD",
+      "quantity": 6,
+      "batch": "2026-07-A",
+      "images": ["/assets/clothing.svg"]
+    }
+  ]
+}

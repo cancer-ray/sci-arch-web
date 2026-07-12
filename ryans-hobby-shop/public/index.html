@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ryan's Online Hobby Shop</title>
+    <meta
+      name="description"
+      content="Magic singles and handmade goods. Pickup in Toronto, shipping across Canada. Pay by Interac e-Transfer — no card fees."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%8D%81%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <div class="brand">
+          <span class="leaf">🍁</span>
+          <div>
+            <h1 id="shop-name">Ryan's Online Hobby Shop</h1>
+            <p id="shop-tagline" class="tagline"></p>
+          </div>
+        </div>
+        <button id="cart-btn" class="cart-btn" aria-haspopup="dialog">
+          Cart <span id="cart-count" class="cart-count">0</span>
+        </button>
+      </div>
+      <div class="rail-banner wrap">
+        Paid by <strong>Interac e-Transfer</strong> — no card network, no interchange fee.
+        <span id="rail-mode" class="rail-mode"></span>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section id="filters" class="filters" aria-label="Filter products">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="magic">Magic cards</button>
+        <button class="chip" data-filter="handmade">Handmade</button>
+      </section>
+
+      <section id="catalog" class="catalog" aria-live="polite"></section>
+    </main>
+
+    <!-- Cart / checkout drawer -->
+    <div id="drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Cart and checkout" hidden>
+      <div class="drawer-panel">
+        <div class="drawer-head">
+          <h2 id="drawer-title">Your cart</h2>
+          <button id="drawer-close" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Step 1: cart -->
+        <div id="cart-view">
+          <div id="cart-lines"></div>
+          <p id="cart-empty" class="muted">Your cart is empty.</p>
+
+          <fieldset class="fulfillment">
+            <legend>Fulfillment</legend>
+            <label class="radio">
+              <input type="radio" name="fulfillment" value="pickup" checked />
+              <span>Pickup in Toronto <em>(free)</em></span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="fulfillment" value="ship" />
+              <span>Ship within Canada <em>($15 flat)</em></span>
+            </label>
+          </fieldset>
+
+          <div id="ship-fields" class="ship-fields" hidden>
+            <input id="ship-name" placeholder="Full name" autocomplete="name" />
+            <input id="ship-line1" placeholder="Street address" autocomplete="address-line1" />
+            <input id="ship-city" placeholder="City" autocomplete="address-level2" />
+            <div class="row">
+              <select id="ship-province" aria-label="Province or territory">
+                <option value="">Province/Territory</option>
+                <option>AB</option><option>BC</option><option>MB</option><option>NB</option>
+                <option>NL</option><option>NS</option><option>NT</option><option>NU</option>
+                <option>ON</option><option>PE</option><option>QC</option><option>SK</option><option>YT</option>
+              </select>
+              <input id="ship-postal" placeholder="Postal code" autocomplete="postal-code" />
+            </div>
+          </div>
+
+          <div class="totals">
+            <div><span>Subtotal</span><span id="sum-subtotal">$0.00</span></div>
+            <div><span>Shipping</span><span id="sum-shipping">$0.00</span></div>
+            <div class="grand"><span>Total</span><span id="sum-total">$0.00</span></div>
+          </div>
+
+          <h3 class="section-label">Your details</h3>
+          <input id="cust-name" placeholder="Your name" autocomplete="name" />
+          <input id="cust-email" type="email" placeholder="Email (where your e-Transfer request goes)" autocomplete="email" />
+
+          <p id="checkout-error" class="error" hidden></p>
+          <button id="checkout-btn" class="primary" disabled>Request Interac e-Transfer</button>
+        </div>
+
+        <!-- Step 2: awaiting payment -->
+        <div id="pending-view" hidden>
+          <div class="spinner" aria-hidden="true"></div>
+          <h3>Waiting for your e-Transfer approval…</h3>
+          <p id="pending-instructions" class="muted"></p>
+          <button id="simulate-btn" class="secondary">✅ I approved it in my bank app</button>
+          <p class="fineprint">
+            (Demo control. In production this arrives automatically when the customer approves the
+            Interac request — no button.)
+          </p>
+        </div>
+
+        <!-- Step 3: paid -->
+        <div id="paid-view" hidden>
+          <div class="check" aria-hidden="true">✓</div>
+          <h3>Payment received — thank you!</h3>
+          <p id="paid-summary" class="muted"></p>
+          <button id="done-btn" class="primary">Keep shopping</button>
+        </div>
+      </div>
+      <div id="drawer-scrim" class="drawer-scrim"></div>
+    </div>
+
+    <footer class="site-footer wrap">
+      <p>
+        Reference implementation for a Canadian account-to-account payment rail. Pickup in Toronto ·
+        Shipping within Canada · Prices in CAD.
+      </p>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

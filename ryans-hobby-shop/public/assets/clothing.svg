@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220" role="img" aria-label="Handmade clothing">
+  <rect width="300" height="220" fill="#1e2a24"/>
+  <path d="M110 44 L150 60 L190 44 L226 78 L200 104 L200 186 L100 186 L100 104 L74 78 Z" fill="#3a6b52" stroke="#7fc79b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M126 48 Q150 74 174 48" fill="none" stroke="#7fc79b" stroke-width="3"/>
+  <text x="150" y="210" text-anchor="middle" fill="#7fc79b" font-family="Georgia, serif" font-size="11">Handmade</text>
+</svg>
