@@ -16,7 +16,7 @@ export function Footer() {
             <Wordmark />
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            A local-first lab notebook. Part 11 alignment on the roadmap.
+            A local-first lab notebook, built solo for the scientific community.
           </p>
         </div>
         <div>
@@ -69,8 +69,8 @@ export function Footer() {
       <div className="border-t border-border">
         <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-muted-foreground sm:px-6 lg:px-8">
           <p className="max-w-2xl leading-relaxed">
-            sci-arch stores account and notebook data to run the sci-arch+ service. For
-            freeLN, we do not keep any of your scientific data. See our{" "}
+            freeLN keeps nothing — your notes live on your own machine, never on a server.
+            Supporting the work is optional and runs through Stripe. See our{" "}
             <Link to="/privacy" className="underline underline-offset-2 hover:text-foreground">
               privacy policy
             </Link>

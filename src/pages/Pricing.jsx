@@ -2,7 +2,6 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PricingTable } from "@/components/PricingTable";
 import { FreeLnBadge } from "@/components/FreeLnBadge";
-import { PlusBadge } from "@/components/PlusBadge";
 import { Seo } from "@/components/Seo";
 
 export default function Pricing() {
@@ -10,7 +9,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-background text-foreground">
       <Seo
         title="Pricing — sci-arch"
-        description="freeLN is free forever. soloLN $15/mo and groupLN $49/seat/mo (early access) add synced, audit-ready, e-signable records."
+        description="freeLN is free forever, no account, local-first. If it helps, buy me lunch (pay what you want, $15 CAD min, monthly) or back my dev work at $50 CAD per seat per month."
         event="pricing_view"
       />
       <Nav />
@@ -18,15 +17,13 @@ export default function Pricing() {
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
           <div className="eyebrow">§ pricing</div>
           <h1 className="mt-4 max-w-3xl font-serif text-4xl leading-tight tracking-tight text-foreground sm:text-5xl">
-            Free today. Built for what's next.
+            freeLN is free. If it helps, you can chip in.
           </h1>
           <p className="mt-4 flex max-w-[65ch] flex-wrap items-baseline gap-x-1.5 text-base text-muted-foreground">
             <FreeLnBadge />
-            <span>is live and free: write, save, and import your own notes, no account needed.</span>
-            <PlusBadge />
             <span>
-              adds a cloud notebook, e-signatures, and a full audit trail: soloLN launches next
-              week, groupLN launches in August. Join the waitlist for early access.
+              is the whole notebook — free forever, no account, and it runs on your own machine. I
+              build it solo. If it earns a place in your week, buy me lunch or back my dev work.
             </span>
           </p>
         </div>

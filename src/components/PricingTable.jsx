@@ -1,23 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWorkspace } from "@/context/WorkspaceContext";
-import { PRICING as P, CONTACT } from "@/constants/testIds";
-import { ContactSalesDialog } from "@/components/ContactSalesDialog";
+import { PRICING as P } from "@/constants/testIds";
 import { FreeLnBadge } from "@/components/FreeLnBadge";
-import { PlusBadge } from "@/components/PlusBadge";
-import { SoloLnBadge } from "@/components/SoloLnBadge";
-import { GroupLnBadge } from "@/components/GroupLnBadge";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SegmentedControl } from "@/components/ui/segmented";
+import { STRIPE, seatCheckoutUrl } from "@/lib/stripe";
 
-// Planned CAD per-seat rates for sci-arch+ (soloLN/groupLN; pricing preview, not yet billed).
-const RATES = {
-  academic: { monthly: 15, annual: 150 },
-  enterprise: { monthly: 49, annual: 490 },
-};
-
-const annualSavings = (tier) => RATES[tier].monthly * 12 - RATES[tier].annual;
+const SUPPORT_EMAIL = "ryan@sci-arch.ca";
 
 function TierCard({ children, testid, featured, badge, badgeVariant = "neutral", className = "" }) {
   return (
@@ -78,19 +68,10 @@ function SeatStepper({ value, onChange, min = 1, max = 100, id }) {
 export function PricingTable({ compact = false }) {
   const { workspace } = useWorkspace();
   const navigate = useNavigate();
-  const [cadence, setCadence] = useState("monthly"); // monthly | annual
-  const [enterpriseSeats, setEnterpriseSeats] = useState(5);
-  const [contactOpen, setContactOpen] = useState(false);
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const [waitlistSeats, setWaitlistSeats] = useState(1);
+  const [teamSeats, setTeamSeats] = useState(3);
 
-  const per = cadence === "annual" ? "/ seat / year" : "/ seat / month";
-  const term = cadence === "annual" ? "/ year" : "/ month";
-
-  const joinWaitlist = (seats) => {
-    setWaitlistSeats(seats);
-    setWaitlistOpen(true);
-  };
+  const openLunch = () => window.open(STRIPE.lunchUrl, "_blank", "noreferrer");
+  const openSeats = () => window.open(seatCheckoutUrl(teamSeats), "_blank", "noreferrer");
 
   return (
     <section
@@ -101,47 +82,30 @@ export function PricingTable({ compact = false }) {
         <div className="mb-8 max-w-[65ch]">
           <div className="eyebrow">§ pricing</div>
           <h2 className="mt-2 font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
-            Free today. Built for what's next.
+            freeLN is free. Chip in only if it helps.
           </h2>
           <p className="mt-3 flex flex-wrap items-baseline gap-x-1.5 text-sm leading-relaxed text-muted-foreground">
             <FreeLnBadge size="sm" />
             <span>
-              is live and free: write, save, and import your own notes, no account needed.
-            </span>
-            <PlusBadge size="sm" />
-            <span>
-              adds a cloud notebook, e-signatures, and a full audit trail: soloLN launches next
-              week, groupLN launches in August. Join the waitlist below for early access.
+              is the whole notebook — free forever, no account, and it runs on your own machine. I
+              build it solo. If it earns a place in your week, you can buy me lunch or back my dev
+              work.
             </span>
           </p>
         </div>
       )}
 
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <SegmentedControl
-          options={[
-            { value: "monthly", label: "Monthly" },
-            { value: "annual", label: "Annual" },
-          ]}
-          value={cadence}
-          onChange={setCadence}
-        />
-        <span className="font-mono text-xs uppercase tracking-[0.12em] text-success">
-          2 months free on annual
-        </span>
-      </div>
-
       <div className="grid gap-0 border border-border md:grid-cols-3">
-        {/* FREELN: live today */}
+        {/* FREELN: free forever */}
         <TierCard
           testid={P.tierFree}
           featured
-          badge="Live now"
+          badge="Free forever"
           badgeVariant="live"
           className="border-r-0 md:border-r border-b md:border-b-0"
         >
           <div className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            finishing a thesis? writing up your last experiment?
+            for the thesis, the write-up, the last experiment
           </div>
           <h3 className="mt-2"><FreeLnBadge size="lg" /></h3>
           <div className="mt-4 flex items-baseline gap-1.5">
@@ -166,79 +130,60 @@ export function PricingTable({ compact = false }) {
           </div>
         </TierCard>
 
-        {/* SOLOLN — coming soon */}
+        {/* BUY ME LUNCH — pay what you want, monthly */}
         <TierCard
           testid={P.tierAcademic}
-          badge="Coming soon"
-          badgeVariant="soon"
           className="border-r-0 md:border-r border-b md:border-b-0"
         >
           <div className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            for a scientist working solo
+            for the months freeLN saves you time
           </div>
-          <div className="mt-2">
-            <PlusBadge size="sm" />
-          </div>
-          <h3 className="mt-1"><SoloLnBadge size="lg" /></h3>
+          <h3 className="mt-2 font-serif text-2xl text-foreground">Buy me lunch once a month</h3>
           <div className="mt-4 flex items-baseline gap-1.5">
-            <span className="font-serif text-4xl">${RATES.academic[cadence]}</span>
-            <span className="font-mono text-xs text-muted-foreground">{term} · CAD</span>
+            <span className="font-serif text-4xl">${STRIPE.minLunchCad}+</span>
+            <span className="font-mono text-xs text-muted-foreground">
+              you choose · ${STRIPE.minLunchCad} CAD min · monthly
+            </span>
           </div>
-          {cadence === "annual" && (
-            <div className="mt-1.5 font-mono text-xs text-success">
-              save ${annualSavings("academic")} / year vs monthly
-            </div>
-          )}
           <div className="mt-1.5 font-mono text-xs text-muted-foreground">
-            early-access pricing — locked in when you join
+            name your price, cancel whenever
           </div>
           <ul className="mt-6 flex-1 space-y-2.5 border-t border-border/60 pt-6 text-sm leading-relaxed text-foreground/80">
-            <li>· Everything in freeLN</li>
-            <li>· Your notebook, synced to the cloud</li>
-            <li>· Bring your own Claude via MCP</li>
-            <li>· Versioned, audit-ready records</li>
-            <li>· Reagent inventory: never run out again</li>
+            <li>· A small monthly thank-you that keeps me building</li>
+            <li>· Pay what freeLN is worth to you</li>
+            <li>· No tier gates — the whole notebook stays free</li>
+            <li>· Cancel from Stripe anytime, no hard feelings</li>
           </ul>
           <div className="mt-6">
             <Button
               data-testid={P.ctaAcademic}
-              variant="outline"
-              onClick={() => joinWaitlist(1)}
+              variant="primary"
+              onClick={openLunch}
               className="w-full"
             >
-              Get early access
+              Buy me lunch
             </Button>
           </div>
         </TierCard>
 
-        {/* GROUPLN — coming soon */}
-        <TierCard testid={P.tierEnterprise} badge="Coming soon" badgeVariant="soon">
+        {/* SUPPORT MY DEV WORK — per seat monthly */}
+        <TierCard testid={P.tierEnterprise}>
           <div className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            GLP-compliance layer · 2 employees to enterprise
+            for labs and teams that run on freeLN
           </div>
-          <div className="mt-2">
-            <PlusBadge size="sm" />
-          </div>
-          <h3 className="mt-1"><GroupLnBadge size="lg" /></h3>
+          <h3 className="mt-2 font-serif text-2xl text-foreground">Support my dev work</h3>
           <div className="mt-4 flex items-baseline gap-1.5">
-            <span className="font-serif text-4xl">${RATES.enterprise[cadence]}</span>
-            <span className="font-mono text-xs text-muted-foreground">{per} · CAD</span>
+            <span className="font-serif text-4xl">${STRIPE.seatPriceCad}</span>
+            <span className="font-mono text-xs text-muted-foreground">/ seat / month · CAD</span>
           </div>
-          {cadence === "annual" && (
-            <div className="mt-1.5 font-mono text-xs text-success">
-              save ${annualSavings("enterprise")} / seat / year vs monthly
-            </div>
-          )}
           <div className="mt-1.5 font-mono text-xs text-muted-foreground">
-            early-access pricing — locked in when you join
+            a steadier way to back the work
           </div>
           <ul className="mt-6 flex-1 space-y-2.5 border-t border-border/60 pt-6 text-sm leading-relaxed text-foreground/80">
-            <li>· Everything in soloLN</li>
-            <li>· Inventory management, shared seats</li>
-            <li>· Tracked commenting between users</li>
-            <li>· Shared equipment booking</li>
-            <li>· Electronic signatures, full audit trail</li>
-            <li>· Part 11-aligned records</li>
+            <li>· Back freeLN on behalf of your whole team</li>
+            <li>· Pick how many seats you want to sponsor</li>
+            <li>· Helps me spend more days shipping features</li>
+            <li>· Adjust or cancel from Stripe anytime</li>
           </ul>
           <div className="mt-6 space-y-3">
             <div className="flex items-center justify-between">
@@ -247,52 +192,41 @@ export function PricingTable({ compact = false }) {
               </span>
               <SeatStepper
                 id={P.seatsEnterprise}
-                value={enterpriseSeats}
-                min={5}
+                value={teamSeats}
+                min={1}
                 max={100}
-                onChange={setEnterpriseSeats}
+                onChange={setTeamSeats}
               />
             </div>
             <div className="border-t border-border pt-3 font-mono text-xs text-muted-foreground">
               Est.{" "}
               <span className="text-foreground">
-                ${(enterpriseSeats * RATES.enterprise[cadence]).toLocaleString("en-CA")}
+                ${(teamSeats * STRIPE.seatPriceCad).toLocaleString("en-CA")}
               </span>{" "}
-              CAD {term}
+              CAD / month
+            </div>
+            <div className="font-mono text-xs text-muted-foreground">
+              You confirm the exact seat count on Stripe's checkout page.
             </div>
           </div>
           <div className="mt-6 space-y-2">
             <Button
               data-testid={P.ctaEnterprise}
-              variant="outline"
-              onClick={() => joinWaitlist(enterpriseSeats)}
+              variant="primary"
+              onClick={openSeats}
               className="w-full"
             >
-              Get early access
+              Support the work
             </Button>
-            <button
-              data-testid={CONTACT.openBtn}
-              onClick={() => setContactOpen(true)}
-              className="w-full rounded-[2px] px-4 py-2 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="block w-full rounded-[2px] px-4 py-2 text-center text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
-              Need GLP/GMP validation? Talk to me directly →
-            </button>
+              For something custom, email me → {SUPPORT_EMAIL}
+            </a>
           </div>
         </TierCard>
       </div>
-
-      <ContactSalesDialog
-        open={contactOpen}
-        onOpenChange={setContactOpen}
-        defaultSeats={enterpriseSeats}
-        variant="enterprise"
-      />
-      <ContactSalesDialog
-        open={waitlistOpen}
-        onOpenChange={setWaitlistOpen}
-        defaultSeats={waitlistSeats}
-        variant="waitlist"
-      />
     </section>
   );
 }

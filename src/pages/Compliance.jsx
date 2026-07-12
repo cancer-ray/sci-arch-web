@@ -11,17 +11,17 @@ import { api } from "@/lib/api";
 import { mdComponents } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
 
-const BACKEND_DOWN_MSG = "sci-arch+ backend isn't available yet — you're on the list.";
+const BACKEND_DOWN_MSG = "The document server isn't reachable right now. Try again in a bit.";
 
 function BackendInterstitial() {
   return (
     <div className="flex flex-col items-start gap-3 py-8">
       <CloudOff className="h-5 w-5 text-muted-foreground" strokeWidth={1.4} />
-      <div className="eyebrow">sci-arch+</div>
-      <h2 className="font-serif text-xl text-foreground">Backend isn&apos;t available yet.</h2>
+      <div className="eyebrow">documents</div>
+      <h2 className="font-serif text-xl text-foreground">The document server isn&apos;t reachable.</h2>
       <p className="max-w-md text-sm text-muted-foreground">
-        The sci-arch+ backend isn&apos;t available yet — you&apos;re on the list. The validation
-        report and SOPs will appear here the moment it comes online.
+        These documents load from a small server I run, and it isn&apos;t responding right now.
+        The validation report and SOPs will appear here once it&apos;s back.
       </p>
     </div>
   );

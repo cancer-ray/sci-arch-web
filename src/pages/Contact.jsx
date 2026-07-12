@@ -54,13 +54,13 @@ export default function Contact() {
         </div>
 
         <div className="mt-6 rounded-[2px] border border-border bg-card p-5 sm:p-6">
-          <h3 className="font-serif text-lg text-foreground">Lab or enterprise inquiry</h3>
+          <h3 className="font-serif text-lg text-foreground">Teams and custom work</h3>
           <p className="mt-2 max-w-[65ch] text-sm text-muted-foreground">
-            Prepaying for a team, volume seats, or need groupLN (Part 11 validation package, SOC 2
-            posture)?
+            If you're backing freeLN for a whole lab, or want something built for how your team
+            works, tell me about it and I'll reply personally.
           </p>
           <Button onClick={() => setSalesOpen(true)} className="mt-4">
-            Contact sales →
+            Email me →
           </Button>
         </div>
       </main>

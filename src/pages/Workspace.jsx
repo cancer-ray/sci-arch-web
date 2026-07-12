@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -22,6 +22,7 @@ import {
   Eye,
   ChevronDown,
   ChevronRight,
+  Command,
   PanelLeft,
   PanelLeftClose,
   MoreVertical,
@@ -32,7 +33,7 @@ import {
   FolderArchive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Kbd } from "@/components/ui/kbd";
+import { HoldHint } from "@/components/ui/hold-hint";
 import { SegmentedControl } from "@/components/ui/segmented";
 import { PrintedCard } from "@/components/ui/popover";
 import { FolderDrop } from "@/components/FolderDrop";
@@ -165,6 +166,7 @@ export default function Workspace() {
     addImage,
   } = useWorkspace();
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [renaming, setRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState("");
@@ -731,23 +733,23 @@ export default function Workspace() {
         actions={paletteActions}
       />
 
-      {/* App bar */}
+      {/* App bar — icon-only controls. Each one carries its label and
+          description in a press-and-hold hint (HoldHint) instead of visible
+          text, so the whole bar stays one row even at phone widths. */}
       <header className="flex h-11 flex-none items-center gap-2 border-b border-border px-3">
-        <Link
-          to="/"
-          title="Back to sci-arch"
-          aria-label="Back to sci-arch home"
-          className="flex h-7 w-7 flex-none items-center justify-center border border-border text-foreground/70 transition-colors hover:bg-secondary hover:text-primary"
-        >
-          <Home className="h-3.5 w-3.5" />
-        </Link>
+        <HoldHint
+          icon={Home}
+          label="Home"
+          description="Back to the sci-arch site."
+          onClick={() => navigate("/")}
+        />
         <div
           data-testid={WORKSPACE.breadcrumb}
           className="flex min-w-0 flex-1 items-center gap-1.5 font-mono text-[12px]"
         >
           <span className="text-primary">§</span>
           <span className="truncate text-foreground">{workspace.rootName}</span>
-          <span className="flex-none text-muted-foreground">
+          <span className="hidden flex-none text-muted-foreground sm:inline">
             · {workspace.markdown.length} {workspace.markdown.length === 1 ? "entry" : "entries"}
           </span>
         </div>
@@ -772,43 +774,34 @@ export default function Workspace() {
           }))}
         />
 
-        <div className="flex flex-1 items-center justify-end gap-1.5">
-          <Button
-            variant="outline"
-            size="sm"
+        <div className="flex flex-1 items-center justify-end gap-1">
+          <HoldHint
+            icon={PanelLeft}
+            label="Files"
+            description={sidebarOpen ? "Hide the files panel." : "Show the files panel."}
             onClick={() => setSidebarOpen((o) => !o)}
+            active={sidebarOpen}
             aria-pressed={sidebarOpen}
-            title={sidebarOpen ? "Hide the files panel" : "Show the files panel"}
-            className={`h-7 gap-1.5 px-2 ${sidebarOpen ? "bg-secondary" : "text-foreground/70"}`}
-          >
-            <PanelLeft className="h-3.5 w-3.5" />
-            <span className="hidden xl:inline">Files</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+          />
+          <HoldHint
+            icon={Wrench}
+            label="Tools"
+            description={toolsOpen ? "Hide the tools panel." : "Show the tools panel."}
             onClick={() => setToolsOpen((o) => !o)}
+            active={toolsOpen}
             aria-pressed={toolsOpen}
-            title={toolsOpen ? "Hide the tools panel" : "Show the tools panel"}
-            className={`h-7 gap-1.5 px-2 ${toolsOpen ? "bg-secondary" : "text-foreground/70"}`}
-          >
-            <Wrench className="h-3.5 w-3.5" />
-            <span className="hidden xl:inline">Tools</span>
-          </Button>
+          />
           {/* New note — split control: primary click = blank note (unchanged),
               caret opens the template picker. */}
           <div ref={templateMenuRef} className="relative flex flex-none items-center">
-            <Button
+            <HoldHint
               data-testid={WORKSPACE.newNoteBtn}
-              variant="outline"
-              size="sm"
+              icon={PlusCircle}
+              label="New note"
+              description="Start a blank note."
               onClick={() => createNote("untitled")}
-              title="Create a new note"
-              className="h-7 gap-1.5 px-2"
-            >
-              <PlusCircle className="h-3.5 w-3.5 text-primary" />
-              <span className="hidden lg:inline">New note</span>
-            </Button>
+              className="text-primary"
+            />
             <Button
               variant="outline"
               size="sm"
@@ -825,7 +818,7 @@ export default function Workspace() {
               <PrintedCard
                 role="menu"
                 aria-label="New note from template"
-                className="absolute right-0 top-full z-30 mt-1 w-44 py-1"
+                className="absolute right-0 top-full z-30 mt-1 w-44 max-w-[calc(100vw-1rem)] py-1"
               >
                 {TEMPLATES.map((t) => (
                   <button
@@ -841,32 +834,26 @@ export default function Workspace() {
               </PrintedCard>
             )}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
+          <HoldHint
+            icon={FileUp}
+            label="Import"
+            description="Add .md, .txt, .html, or .docx files as notes."
             onClick={() => importInputRef.current?.click()}
-            title="Import files as notes (.md, .txt, .html, .docx)"
-            className="h-7 gap-1.5 px-2"
-          >
-            <FileUp className="h-3.5 w-3.5 text-primary" />
-            <span className="hidden xl:inline">Import</span>
-          </Button>
+            className="text-primary"
+          />
           {/* Export — split control: primary click still downloads the current
               note as .md (same behavior + testid as before), caret opens the
               .md / .zip / PDF menu. */}
           <div ref={exportMenuRef} className="relative flex flex-none items-center">
-            <Button
+            <HoldHint
               data-testid={WORKSPACE.downloadNoteBtn}
-              variant="outline"
-              size="sm"
+              icon={Download}
+              label="Export"
+              description="Download the current note as markdown."
               disabled={!active}
               onClick={() => downloadEntry(active)}
-              title="Download the current note as markdown"
-              className="h-7 gap-1.5 px-2"
-            >
-              <Download className="h-3.5 w-3.5 text-primary" />
-              <span className="hidden lg:inline">Export</span>
-            </Button>
+              className="text-primary"
+            />
             <Button
               variant="outline"
               size="sm"
@@ -883,7 +870,7 @@ export default function Workspace() {
               <PrintedCard
                 role="menu"
                 aria-label="Export options"
-                className="absolute right-0 top-full z-30 mt-1 w-52 py-1"
+                className="absolute right-0 top-full z-30 mt-1 w-52 max-w-[calc(100vw-1rem)] py-1"
               >
                 <button
                   role="menuitem"
@@ -919,37 +906,32 @@ export default function Workspace() {
               </PrintedCard>
             )}
           </div>
-          <Button
-            data-testid={WORKSPACE.gmpLockBtn}
-            variant="ghost"
-            size="sm"
-            disabled
-            title="Sign & lock — sci-arch+"
-            className="hidden h-7 gap-1.5 px-2 text-muted-foreground/60 xl:inline-flex"
-          >
-            <Lock className="h-3.5 w-3.5" />
-            Sign &amp; lock
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+          {/* Signing is planned but not built yet — the control stays visible
+              (sm and up) and disabled so the roadmap is honest. The extra
+              span keeps the hidden button from leaving a stray flex gap. */}
+          <span className="hidden sm:inline-flex">
+            <HoldHint
+              data-testid={WORKSPACE.gmpLockBtn}
+              icon={Lock}
+              label="Sign & lock — coming soon"
+              description="E-signatures and locked entries are on the roadmap."
+              variant="ghost"
+              disabled
+            />
+          </span>
+          <HoldHint
+            icon={Command}
+            label="Command palette"
+            description="Search notes and actions. Cmd or Ctrl-K."
             onClick={() => setPaletteOpen(true)}
-            title="Command palette (Cmd/Ctrl-K)"
-            aria-label="Open command palette"
-            className="h-7 gap-1.5 px-1.5"
-          >
-            <Kbd className="border-none bg-transparent px-0.5">⌘K</Kbd>
-          </Button>
-          <Button
+          />
+          <HoldHint
+            icon={X}
+            label="Close notebook"
+            description="Close this notebook."
             variant="ghost"
-            size="sm"
             onClick={closeNotebook}
-            title="Close this notebook"
-            className="h-7 gap-1.5 px-2 text-foreground/70"
-          >
-            <X className="h-3.5 w-3.5" />
-            <span className="hidden xl:inline">Close</span>
-          </Button>
+          />
         </div>
       </header>
 
@@ -1051,7 +1033,7 @@ export default function Workspace() {
                       ref={menuRef}
                       role="menu"
                       aria-label={`Actions for ${m.name}`}
-                      className="absolute right-1 top-full z-30 mt-0.5 w-36 py-1"
+                      className="absolute right-1 top-full z-30 mt-0.5 w-36 max-w-[calc(100vw-1rem)] py-1"
                     >
                       {m.editable && (
                         <button
